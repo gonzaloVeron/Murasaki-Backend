@@ -1,6 +1,7 @@
 package com.backend.murasaki.controllers;
 
 import com.backend.murasaki.dtos.StudentDTO;
+import com.backend.murasaki.exceptions.StudentNotFoundException;
 import com.backend.murasaki.exceptions.TeacherNotFoundException;
 import com.backend.murasaki.models.Student;
 import com.backend.murasaki.services.StudentService;
@@ -24,7 +25,7 @@ public class StudentController {
 
     @GetMapping(path = "{student_id}")
     @ResponseBody
-    public Student getById(@PathVariable int student_id) {
+    public Student getById(@PathVariable int student_id) throws StudentNotFoundException {
         return this.studentService.findById(student_id);
     }
 

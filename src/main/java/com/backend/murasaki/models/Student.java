@@ -3,6 +3,7 @@ package com.backend.murasaki.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Table(name = "students")
 @Entity
@@ -22,6 +23,9 @@ public class Student {
     @JoinColumn(name = "teacher_id", nullable = false)
     @JsonIgnore
     private Teacher teacherAsigned;
+
+    @OneToMany(mappedBy = "studentAsigned", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HomeWork> homeWorks;
 
     public Student(){
 
@@ -70,6 +74,18 @@ public class Student {
 
     public void setTeacherAsigned(Teacher teacherAsigned) {
         this.teacherAsigned = teacherAsigned;
+    }
+
+    public List<HomeWork> getHomeWorks() {
+        return homeWorks;
+    }
+
+    public void setHomeWorks(List<HomeWork> homeWorks) {
+        this.homeWorks = homeWorks;
+    }
+
+    public void addHomeWork(HomeWork homeWork){
+        this.homeWorks.add(homeWork);
     }
 
 }
