@@ -1,7 +1,6 @@
 package com.backend.murasaki.controllers;
 
 import com.backend.murasaki.dtos.TeacherDTO;
-import com.backend.murasaki.exceptions.TeacherNotFoundException;
 import com.backend.murasaki.models.Teacher;
 import com.backend.murasaki.services.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ public class TeacherController {
 
     @GetMapping(path = "{teacher_id}")
     @ResponseBody
-    public Teacher getById(@PathVariable int teacher_id) throws TeacherNotFoundException {
+    public Teacher getById(@PathVariable int teacher_id) {
         return this.teacherService.findById(teacher_id);
     }
 

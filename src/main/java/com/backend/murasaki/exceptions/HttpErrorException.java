@@ -1,6 +1,6 @@
 package com.backend.murasaki.exceptions;
 
-public class HttpErrorException extends Exception {
+public class HttpErrorException extends RuntimeException {
 
     private int status;
 

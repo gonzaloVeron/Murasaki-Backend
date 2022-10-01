@@ -1,8 +1,6 @@
 package com.backend.murasaki.controllers;
 
 import com.backend.murasaki.dtos.HomeWorkDTO;
-import com.backend.murasaki.exceptions.HomeWorkNotFoundException;
-import com.backend.murasaki.exceptions.StudentNotFoundException;
 import com.backend.murasaki.models.HomeWork;
 import com.backend.murasaki.services.HomeWorkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +21,15 @@ public class HomeWorkController {
         return this.homeWorkService.findAll();
     }
 
-    @GetMapping("{homework_id")
+    @GetMapping("{homework_id}")
     @ResponseBody
-    public HomeWork getById(@PathVariable int homework_id) throws HomeWorkNotFoundException {
+    public HomeWork getById(@PathVariable int homework_id) {
         return this.homeWorkService.findById(homework_id);
     }
 
     @PostMapping("{student_id}")
     @ResponseBody
-    public HomeWork create(@RequestBody HomeWorkDTO dto, @PathVariable int student_id) throws StudentNotFoundException {
+    public HomeWork create(@RequestBody HomeWorkDTO dto, @PathVariable int student_id) {
         return this.homeWorkService.save(dto, student_id);
     }
 

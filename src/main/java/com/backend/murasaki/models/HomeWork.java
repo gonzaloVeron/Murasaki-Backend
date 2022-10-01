@@ -19,10 +19,10 @@ public class HomeWork {
     @Column
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "homework_id", nullable = false)
-    @JsonIgnore
-    private Student studentAsigned;
+    //@ManyToOne
+    //@JoinColumn(name = "homework_id", nullable = false)
+    //@JsonIgnore
+    //private Student studentAsigned;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "multipleChoises", joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"))
@@ -39,14 +39,14 @@ public class HomeWork {
         this.title = title;
         this.description = description;
         this.multipleChoise = multipleChoise;
-        this.studentAsigned = studentAsigned;
+        //this.studentAsigned = studentAsigned;
     }
 
     public HomeWork(String title, String description, Map<String, Boolean> multipleChoise, Student studentAsigned){
         this.title = title;
         this.description = description;
         this.multipleChoise = multipleChoise;
-        this.studentAsigned = studentAsigned;
+        //this.studentAsigned = studentAsigned;
     }
 
     public String getTitle() {
@@ -81,11 +81,11 @@ public class HomeWork {
         this.id = id;
     }
 
-    public Student getStudentAsigned() {
-        return studentAsigned;
-    }
+    //public Student getStudentAsigned() {
+    //    return studentAsigned;
+    //}
 
-    public void setStudentAsigned(Student studentAsigned) {
-        this.studentAsigned = studentAsigned;
-    }
+    //public void setStudentAsigned(Student studentAsigned) {
+    //    this.studentAsigned = studentAsigned;
+    //}
 }

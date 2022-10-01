@@ -1,5 +1,7 @@
 package com.backend.murasaki.models;
 
+import com.backend.murasaki.dtos.TeacherDTO;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -14,7 +16,7 @@ public class Teacher {
     @Column
     private String name;
 
-    @OneToMany(mappedBy = "teacherAsigned", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "teacherAssigned", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Student> students;
 
     public Teacher(){
@@ -54,6 +56,12 @@ public class Teacher {
 
     public void setStudents(List<Student> students) {
         this.students = students;
+    }
+
+    public TeacherDTO toDTO(){
+        TeacherDTO dto = new TeacherDTO();
+        dto.setName(this.name);
+        return dto;
     }
 
 }

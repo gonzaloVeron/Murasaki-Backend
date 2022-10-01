@@ -1,8 +1,7 @@
 package com.backend.murasaki.services;
 
 import com.backend.murasaki.dtos.TeacherDTO;
-import com.backend.murasaki.exceptions.TeacherNotFoundException;
-import com.backend.murasaki.exceptions.TeacherNotFoundExceptionSupplier;
+import com.backend.murasaki.exceptions.NotFoundException;
 import com.backend.murasaki.models.Student;
 import com.backend.murasaki.models.Teacher;
 import com.backend.murasaki.repositories.TeacherRepository;
@@ -21,8 +20,7 @@ public class TeacherService {
 
     @Transactional
     public Teacher save(TeacherDTO dto) {
-        List<Student> initialStudents = new ArrayList<Student>();
-        Teacher teacher = new Teacher(dto.getName(), initialStudents);
+        Teacher teacher = new Teacher(dto.getName(), new ArrayList<Student>());
         return this.teacherRepository.save(teacher);
     }
 
@@ -32,8 +30,8 @@ public class TeacherService {
     }
 
     @Transactional
-    public Teacher findById(int teacher_id) throws TeacherNotFoundException {
-        return this.teacherRepository.findById(teacher_id).orElseThrow(new TeacherNotFoundExceptionSupplier());
+    public Teacher findById(int teacher_id) {
+        return this.teacherRepository.findById(teacher_id).orElseThrow(() -> new NotFoundException("The requested teacher was not found."));
     }
 
 }
