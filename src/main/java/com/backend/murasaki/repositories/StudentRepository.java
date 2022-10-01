@@ -14,7 +14,7 @@ import java.util.Optional;
 @Repository
 public interface StudentRepository extends CrudRepository<Student, Integer> {
 
-    @EntityGraph(attributePaths = {"teacherAssigned", "lessons", "interests"})
+    @EntityGraph(attributePaths = {"teacherAssigned", "interests"})
     Optional<Student> findById(Integer id);
 
     @EntityGraph(attributePaths = {"teacherAssigned"})

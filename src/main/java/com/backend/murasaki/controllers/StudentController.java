@@ -1,8 +1,6 @@
 package com.backend.murasaki.controllers;
 
-import com.backend.murasaki.dtos.SearchStudentByDTO;
-import com.backend.murasaki.dtos.StudentDTO;
-import com.backend.murasaki.dtos.StudentDTOout;
+import com.backend.murasaki.dtos.*;
 import com.backend.murasaki.models.Student;
 import com.backend.murasaki.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +50,18 @@ public class StudentController {
     @ResponseBody
     public List<Student> searchByTeacher(@PathVariable int teacher_id) {
         return this.studentService.searchByTeacher(teacher_id);
+    }
+
+    @PostMapping(path = "/addInterest")
+    @ResponseBody
+    public Student addInterest(@RequestBody AddInterestDTO dto){
+        return this.studentService.addInterest(dto);
+    }
+
+    @PostMapping(path = "/addLesson/{student_id}")
+    @ResponseBody
+    public Student addLesson(@RequestBody LessonDTO dto, @PathVariable int student_id){
+        return this.studentService.addLesson(dto, student_id);
     }
 
 }

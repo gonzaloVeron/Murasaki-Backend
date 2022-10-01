@@ -27,10 +27,10 @@ public class LessonController {
         return this.lessonService.findById(homework_id);
     }
 
-    @PostMapping("{student_id}")
+    @PostMapping("")
     @ResponseBody
-    public Lesson create(@RequestBody LessonDTO dto, @PathVariable int student_id) {
-        return this.lessonService.save(dto, student_id);
+    public Lesson create(@RequestBody LessonDTO dto) {
+        return this.lessonService.save(dto);
     }
 
 }

@@ -21,10 +21,10 @@ public class LessonService {
     private StudentService studentService;
 
     @Transactional
-    public Lesson save(LessonDTO dto, int student_id) {
-        Student student = this.studentService.findById(student_id);
+    public Lesson save(LessonDTO dto) {
+        //Student student = this.studentService.findById(student_id);
         Lesson lesson = new Lesson(dto.getDate(), dto.getLessonNumber(), dto.getContent(), dto.getHomework());
-        student.addLesson(lesson);
+        //student.addLesson(lesson);
         return this.lessonRepository.save(lesson);
     }
 

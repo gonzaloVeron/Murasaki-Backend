@@ -18,12 +18,13 @@ public class Student {
     @Column
     private int age;
 
-    @ManyToMany
-    @JoinTable(
-        name = "student_interest",
-        joinColumns = @JoinColumn(name = "student_id"),
-        inverseJoinColumns = @JoinColumn(name = "interest_id")
-    )
+    //@ManyToMany
+    //@JoinTable(
+    //    name = "student_interest",
+    //    joinColumns = @JoinColumn(name = "student_id"),
+    //    inverseJoinColumns = @JoinColumn(name = "interest_id")
+    //)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Interest> interests;
 
     @Column
@@ -127,6 +128,10 @@ public class Student {
 
     public void addLesson(Lesson lesson){
         this.lessons.add(lesson);
+    }
+
+    public void addInterest(Interest interest){
+        this.interests.add(interest);
     }
 
 }
