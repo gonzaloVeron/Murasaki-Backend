@@ -1,5 +1,6 @@
 package com.backend.murasaki.services;
 
+import com.backend.murasaki.dtos.SearchStudentByDTO;
 import com.backend.murasaki.dtos.StudentDTO;
 import com.backend.murasaki.exceptions.NotFoundException;
 import com.backend.murasaki.models.Student;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class StudentService {
@@ -40,14 +42,22 @@ public class StudentService {
     }
 
     @Transactional(readOnly = true)
-    public List<Student> searchByLevel(int jlptLevel){
-        return this.studentRepository.findByJlptLevel(jlptLevel);
+    public List<Student> searchByLevel(SearchStudentByDTO dto){
+        if(dto.getLevel() > 0){
+            return this.studentRepository.findByJlptLevel(dto.getLevel());
+        }else{
+            return this.findAll();
+        }
     }
 
     @Transactional(readOnly = true)
-    public List<Student> searchByTeacherName(String teacherName) {
-        Teacher teacher = this.teacherService.findByName(teacherName);
-        return this.studentRepository.findByTeacherAssigned(teacher);
+    public List<Student> searchByTeacherName(SearchStudentByDTO dto) {
+        if(dto.getTeacherName() != ""){
+            Teacher teacher = this.teacherService.findByName(dto.getTeacherName());
+            return this.studentRepository.findByTeacherAssigned(teacher);
+        }else{
+            return this.findAll();
+        }
     }
 
     @Transactional(readOnly = true)

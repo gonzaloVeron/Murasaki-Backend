@@ -1,8 +1,8 @@
 package com.backend.murasaki.controllers;
 
+import com.backend.murasaki.dtos.SearchStudentByDTO;
 import com.backend.murasaki.dtos.StudentDTO;
 import com.backend.murasaki.dtos.StudentDTOout;
-import com.backend.murasaki.exceptions.NotFoundException;
 import com.backend.murasaki.models.Student;
 import com.backend.murasaki.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,22 +36,22 @@ public class StudentController {
         return this.studentService.save(dto);
     }
 
-    @GetMapping(path = "/search/{jlptLevel}")
+    @PostMapping(path = "/searchByTeacherName")
     @ResponseBody
-    public List<StudentDTOout> searchByLevel(@PathVariable int jlptLevel){
-        return this.studentService.searchByLevel(jlptLevel).stream().map(student -> new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getTeacherAssigned().toDTO())).collect(Collectors.toList());
+    public List<StudentDTOout> searchByTeacherName(@RequestBody SearchStudentByDTO dto){
+        return this.studentService.searchByTeacherName(dto).stream().map(student -> new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getTeacherAssigned().toDTO())).collect(Collectors.toList());
+    }
+
+    @PostMapping(path = "/searchByLevel")
+    @ResponseBody
+    public List<StudentDTOout> searchByLevel(@RequestBody SearchStudentByDTO dto){
+        return this.studentService.searchByLevel(dto).stream().map(student -> new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getTeacherAssigned().toDTO())).collect(Collectors.toList());
     }
 
     @GetMapping(path = "/searchByTeacher/{teacher_id}")
     @ResponseBody
     public List<Student> searchByTeacher(@PathVariable int teacher_id) {
         return this.studentService.searchByTeacher(teacher_id);
-    }
-
-    @GetMapping(path = "/searchByTeacherName/{teacher_name}")
-    @ResponseBody
-    public List<StudentDTOout> searchByTeacherName(@PathVariable String teacher_name){
-        return this.studentService.searchByTeacherName(teacher_name).stream().map(student -> new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getTeacherAssigned().toDTO())).collect(Collectors.toList());
     }
 
 }
