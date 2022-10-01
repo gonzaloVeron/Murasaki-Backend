@@ -16,4 +16,6 @@ public interface TeacherRepository extends CrudRepository<Teacher, Integer> {
 
     List<Teacher> findAll();
 
+    Optional<Teacher> findByName(String teacherName);
+
 }

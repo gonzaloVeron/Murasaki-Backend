@@ -10,17 +10,14 @@ public class StudentDTO {
 
     private int teacherAsignedId;
 
-    private Date schedule;
-
     private String priorKnowledge;
 
     private int age;
 
-    public StudentDTO(String name, int jlptLevel, int teacherAsignedId, Date schedule, String priorKnowledge, int age){
+    public StudentDTO(String name, int jlptLevel, int teacherAsignedId, String priorKnowledge, int age){
         this.name = name;
         this.jlptLevel = jlptLevel;
         this.teacherAsignedId = teacherAsignedId;
-        this.schedule = schedule;
         this.priorKnowledge = priorKnowledge;
         this.age = age;
     }
@@ -49,14 +46,6 @@ public class StudentDTO {
         this.teacherAsignedId = teacherAsignedId;
     }
 
-    public Date getSchedule() {
-        return schedule;
-    }
-
-    public void setSchedule(Date schedule) {
-        this.schedule = schedule;
-    }
-
     public String getPriorKnowledge() {
         return priorKnowledge;
     }
@@ -72,4 +61,5 @@ public class StudentDTO {
     public void setAge(int age) {
         this.age = age;
     }
+
 }

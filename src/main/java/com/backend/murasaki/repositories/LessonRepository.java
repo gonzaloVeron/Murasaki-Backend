@@ -1,6 +1,6 @@
 package com.backend.murasaki.repositories;
 
-import com.backend.murasaki.models.HomeWork;
+import com.backend.murasaki.models.Lesson;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -10,10 +10,10 @@ import java.util.Optional;
 
 @Configuration
 @Repository
-public interface HomeWorkRepository extends CrudRepository<HomeWork, Integer> {
+public interface LessonRepository extends CrudRepository<Lesson, Integer> {
 
-    Optional<HomeWork> findById(Integer id);
+    Optional<Lesson> findById(Integer id);
 
-    List<HomeWork> findAll();
+    List<Lesson> findAll();
 
 }

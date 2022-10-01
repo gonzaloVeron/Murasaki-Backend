@@ -1,7 +1,5 @@
 package com.backend.murasaki.dtos;
 
-import java.util.Date;
-
 public class StudentDTOout {
 
     private int id;
@@ -12,9 +10,7 @@ public class StudentDTOout {
 
     private TeacherDTO teacherDTO;
 
-    private Date schedule;
-
-    public StudentDTOout(int id, String name, int jlptLevel, TeacherDTO teacherDTO, Date schedule) {
+    public StudentDTOout(int id, String name, int jlptLevel, TeacherDTO teacherDTO) {
         this.id = id;
         this.name = name;
         this.jlptLevel = jlptLevel;
@@ -43,14 +39,6 @@ public class StudentDTOout {
 
     public void setTeacherDTO(TeacherDTO teacherDTO) {
         this.teacherDTO = teacherDTO;
-    }
-
-    public Date getSchedule() {
-        return schedule;
-    }
-
-    public void setSchedule(Date schedule) {
-        this.schedule = schedule;
     }
 
     public int getId() {

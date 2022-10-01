@@ -1,12 +1,7 @@
 package com.backend.murasaki.models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 import javax.persistence.*;
-import java.util.Date;
 import java.util.List;
 
 @Table(name = "students")
@@ -37,38 +32,31 @@ public class Student {
     @Column
     private int jlptLevel;
 
-    @Temporal(TemporalType.DATE)
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @Column
-    private Date schedule;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id", nullable = false)
     @JsonIgnore
     private Teacher teacherAssigned;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<HomeWork> homeWorks;
+    private List<Lesson> lessons;
 
     public Student(){
 
     }
 
-    public Student(int id, String name, int jlptLevel, Teacher teacherAssigned, Date schedule, String priorKnowledge, int age){
+    public Student(int id, String name, int jlptLevel, Teacher teacherAssigned, String priorKnowledge, int age){
         this.id = id;
         this.name = name;
         this.jlptLevel = jlptLevel;
         this.teacherAssigned = teacherAssigned;
-        this.schedule = schedule;
         this.priorKnowledge = priorKnowledge;
         this.age = age;
     }
 
-    public Student(String name, int jlptLevel, Teacher teacherAssigned, Date schedule, String priorKnowledge, int age){
+    public Student(String name, int jlptLevel, Teacher teacherAssigned, String priorKnowledge, int age){
         this.name = name;
         this.jlptLevel = jlptLevel;
         this.teacherAssigned = teacherAssigned;
-        this.schedule = schedule;
         this.priorKnowledge = priorKnowledge;
         this.age = age;
     }
@@ -105,26 +93,6 @@ public class Student {
         this.teacherAssigned = teacherAssigned;
     }
 
-    public List<HomeWork> getHomeWorks() {
-        return homeWorks;
-    }
-
-    public void setHomeWorks(List<HomeWork> homeWorks) {
-        this.homeWorks = homeWorks;
-    }
-
-    public void addHomeWork(HomeWork homeWork){
-        this.homeWorks.add(homeWork);
-    }
-
-    public Date getSchedule() {
-        return schedule;
-    }
-
-    public void setSchedule(Date schedule) {
-        this.schedule = schedule;
-    }
-
     public int getAge() {
         return age;
     }
@@ -148,4 +116,17 @@ public class Student {
     public void setInterests(List<Interest> interests) {
         this.interests = interests;
     }
+
+    public List<Lesson> getLessons() {
+        return lessons;
+    }
+
+    public void setLessons(List<Lesson> lessons) {
+        this.lessons = lessons;
+    }
+
+    public void addLesson(Lesson lesson){
+        this.lessons.add(lesson);
+    }
+
 }

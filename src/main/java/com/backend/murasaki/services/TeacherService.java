@@ -24,12 +24,17 @@ public class TeacherService {
         return this.teacherRepository.save(teacher);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Teacher> findAll() {
         return this.teacherRepository.findAll();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
+    public Teacher findByName(String teacherName) {
+        return this.teacherRepository.findByName(teacherName).orElseThrow(() -> new NotFoundException("The requested teacher was not found."));
+    }
+
+    @Transactional(readOnly = true)
     public Teacher findById(int teacher_id) {
         return this.teacherRepository.findById(teacher_id).orElseThrow(() -> new NotFoundException("The requested teacher was not found."));
     }

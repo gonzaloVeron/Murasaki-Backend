@@ -21,7 +21,7 @@ public class StudentController {
     @GetMapping(path = "")
     @ResponseBody
     public List<StudentDTOout> getAll() {
-        return this.studentService.findAll().stream().map(student -> new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getTeacherAssigned().toDTO(), student.getSchedule())).collect(Collectors.toList());
+        return this.studentService.findAll().stream().map(student -> new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getTeacherAssigned().toDTO())).collect(Collectors.toList());
     }
 
     @GetMapping(path = "{student_id}")
@@ -38,8 +38,8 @@ public class StudentController {
 
     @GetMapping(path = "/search/{jlptLevel}")
     @ResponseBody
-    public List<Student> searchByLevel(@PathVariable int jlptLevel){
-        return this.studentService.searchByLevel(jlptLevel);
+    public List<StudentDTOout> searchByLevel(@PathVariable int jlptLevel){
+        return this.studentService.searchByLevel(jlptLevel).stream().map(student -> new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getTeacherAssigned().toDTO())).collect(Collectors.toList());
     }
 
     @GetMapping(path = "/searchByTeacher/{teacher_id}")
@@ -48,9 +48,10 @@ public class StudentController {
         return this.studentService.searchByTeacher(teacher_id);
     }
 
-    @PostMapping(path = "/template")
-    public void setTemplate(){
-        this.studentService.setTemplate();
+    @GetMapping(path = "/searchByTeacherName/{teacher_name}")
+    @ResponseBody
+    public List<StudentDTOout> searchByTeacherName(@PathVariable String teacher_name){
+        return this.studentService.searchByTeacherName(teacher_name).stream().map(student -> new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getTeacherAssigned().toDTO())).collect(Collectors.toList());
     }
 
 }

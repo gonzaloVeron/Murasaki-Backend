@@ -14,14 +14,16 @@ import java.util.Optional;
 @Repository
 public interface StudentRepository extends CrudRepository<Student, Integer> {
 
-    @EntityGraph(attributePaths = {"teacherAssigned", "homeWorks"})
+    @EntityGraph(attributePaths = {"teacherAssigned", "lessons", "interests"})
     Optional<Student> findById(Integer id);
 
     @EntityGraph(attributePaths = {"teacherAssigned"})
     List<Student> findAll();
 
+    @EntityGraph(attributePaths = {"teacherAssigned"})
     List<Student> findByJlptLevel(int jlptLevel);
 
+    @EntityGraph(attributePaths = {"teacherAssigned"})
     List<Student> findByTeacherAssigned(Teacher teacher);
 
 }
