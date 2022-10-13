@@ -1,9 +1,6 @@
 package com.backend.murasaki.services;
 
-import com.backend.murasaki.dtos.AddInterestDTO;
-import com.backend.murasaki.dtos.LessonDTO;
-import com.backend.murasaki.dtos.SearchStudentByDTO;
-import com.backend.murasaki.dtos.StudentDTO;
+import com.backend.murasaki.dtos.*;
 import com.backend.murasaki.exceptions.NotFoundException;
 import com.backend.murasaki.models.Interest;
 import com.backend.murasaki.models.Lesson;
@@ -12,11 +9,19 @@ import com.backend.murasaki.models.Teacher;
 import com.backend.murasaki.repositories.LessonRepository;
 import com.backend.murasaki.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class StudentService {
@@ -31,7 +36,7 @@ public class StudentService {
     private InterestService interestService;
 
     @Autowired
-    private LessonRepository lessonRepository;
+    private LessonRepository lessonRepository; // plantear mejor solucion para usar el service
 
     @Transactional
     public Student save(StudentDTO dto) {
@@ -51,31 +56,6 @@ public class StudentService {
         return this.studentRepository.findById(student_id).orElseThrow(() -> new NotFoundException("The requested Student was not found."));
     }
 
-    @Transactional(readOnly = true)
-    public List<Student> searchByLevel(SearchStudentByDTO dto){
-        if(dto.getLevel() > 0){
-            return this.studentRepository.findByJlptLevel(dto.getLevel());
-        }else{
-            return this.findAll();
-        }
-    }
-
-    @Transactional(readOnly = true)
-    public List<Student> searchByTeacherName(SearchStudentByDTO dto) {
-        if(dto.getTeacherName() != ""){
-            Teacher teacher = this.teacherService.findByName(dto.getTeacherName());
-            return this.studentRepository.findByTeacherAssigned(teacher);
-        }else{
-            return this.findAll();
-        }
-    }
-
-    @Transactional(readOnly = true)
-    public List<Student> searchByTeacher(int teacher_id) {
-        Teacher teacher = this.teacherService.findById(teacher_id);
-        return this.studentRepository.findByTeacherAssigned(teacher);
-    }
-
     @Transactional
     public Student addInterest(AddInterestDTO dto){
         Student student = this.findById(dto.getStudent_id());
@@ -91,6 +71,23 @@ public class StudentService {
         this.lessonRepository.save(lesson);
         student.addLesson(lesson);
         return this.studentRepository.save(student);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<StudentDTOout> find(String search_text, int page, int size){
+        //Pageable page = PageRequest.of(1, 2, Sort.by("name"));
+        Pageable p = PageRequest.of(page, size);
+        Page<StudentDTOout> students;
+        if(this.isInteger(search_text)){
+            students = this.studentRepository.findByJlptLevel(p, Integer.parseInt(search_text)).map(student -> new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getTeacherAssigned().toDTO()));
+        }else{
+            students = this.studentRepository.findByTeacherAssignedNameLike(p,"%"+search_text+"%").map(student -> new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getTeacherAssigned().toDTO()));
+        }
+        return students;
+    }
+
+    private boolean isInteger(String str){
+        return Pattern.matches("-?[0-9]+", str);
     }
 
 }

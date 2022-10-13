@@ -4,8 +4,10 @@ import com.backend.murasaki.dtos.*;
 import com.backend.murasaki.models.Student;
 import com.backend.murasaki.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,24 +36,6 @@ public class StudentController {
         return this.studentService.save(dto);
     }
 
-    @PostMapping(path = "/searchByTeacherName")
-    @ResponseBody
-    public List<StudentDTOout> searchByTeacherName(@RequestBody SearchStudentByDTO dto){
-        return this.studentService.searchByTeacherName(dto).stream().map(student -> new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getTeacherAssigned().toDTO())).collect(Collectors.toList());
-    }
-
-    @PostMapping(path = "/searchByLevel")
-    @ResponseBody
-    public List<StudentDTOout> searchByLevel(@RequestBody SearchStudentByDTO dto){
-        return this.studentService.searchByLevel(dto).stream().map(student -> new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getTeacherAssigned().toDTO())).collect(Collectors.toList());
-    }
-
-    @GetMapping(path = "/searchByTeacher/{teacher_id}")
-    @ResponseBody
-    public List<Student> searchByTeacher(@PathVariable int teacher_id) {
-        return this.studentService.searchByTeacher(teacher_id);
-    }
-
     @PostMapping(path = "/addInterest")
     @ResponseBody
     public Student addInterest(@RequestBody AddInterestDTO dto){
@@ -64,4 +48,9 @@ public class StudentController {
         return this.studentService.addLesson(dto, student_id);
     }
 
+    @GetMapping(path = "/find/{search_text}/{page}/{size}")
+    @ResponseBody
+    public Page<StudentDTOout> find(@PathVariable String search_text, @PathVariable int page, @PathVariable int size){
+        return this.studentService.find(search_text, page, size);
+    }
 }

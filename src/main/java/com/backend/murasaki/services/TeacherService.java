@@ -39,4 +39,9 @@ public class TeacherService {
         return this.teacherRepository.findById(teacher_id).orElseThrow(() -> new NotFoundException("The requested teacher was not found."));
     }
 
+    @Transactional(readOnly = true)
+    public Teacher findByNameFlex(String name){
+        return new Teacher();
+    }
+
 }
