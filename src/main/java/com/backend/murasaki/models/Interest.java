@@ -1,6 +1,10 @@
 package com.backend.murasaki.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+
+
 import java.util.List;
 
 @Table(name = "interests")
@@ -16,9 +20,6 @@ public class Interest {
 
     @Column
     private String icon;
-
-    //@ManyToMany
-    //List<Student> students;
 
     public Interest(){
 

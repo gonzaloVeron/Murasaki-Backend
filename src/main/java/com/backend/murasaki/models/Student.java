@@ -1,8 +1,11 @@
 package com.backend.murasaki.models;
 
+import com.backend.murasaki.dtos.StudentDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Table(name = "students")
 @Entity
@@ -24,11 +27,27 @@ public class Student {
     //    joinColumns = @JoinColumn(name = "student_id"),
     //    inverseJoinColumns = @JoinColumn(name = "interest_id")
     //)
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Interest> interests;
+
+    //@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @ManyToMany
+    @JoinTable(
+        name = "student_interest",
+        joinColumns = @JoinColumn(name = "student_id"),
+        inverseJoinColumns = @JoinColumn(name = "interest_id")
+    )
+    private Set<Interest> interests;
 
     @Column
     private String priorKnowledge;
+
+    @Column
+    private int tel;
+
+    @Column
+    private String email;
+
+    @Column
+    private String emailTutor;
 
     @Column
     private int jlptLevel;
@@ -45,21 +64,31 @@ public class Student {
 
     }
 
-    public Student(int id, String name, int jlptLevel, Teacher teacherAssigned, String priorKnowledge, int age){
+    public Student(int id, String name, int jlptLevel, Teacher teacherAssigned, String priorKnowledge, int age, int tel, String email, String emailTutor, Set<Interest> interests, List<Lesson> lessons){
         this.id = id;
         this.name = name;
         this.jlptLevel = jlptLevel;
         this.teacherAssigned = teacherAssigned;
         this.priorKnowledge = priorKnowledge;
         this.age = age;
+        this.tel = tel;
+        this.email = email;
+        this.emailTutor = emailTutor;
+        this.interests = interests;
+        this.lessons = lessons;
     }
 
-    public Student(String name, int jlptLevel, Teacher teacherAssigned, String priorKnowledge, int age){
+    public Student(String name, int jlptLevel, Teacher teacherAssigned, String priorKnowledge, int age, int tel, String email, String emailTutor, Set<Interest> interests, List<Lesson> lessons){
         this.name = name;
         this.jlptLevel = jlptLevel;
         this.teacherAssigned = teacherAssigned;
         this.priorKnowledge = priorKnowledge;
         this.age = age;
+        this.tel = tel;
+        this.email = email;
+        this.emailTutor = emailTutor;
+        this.interests = interests;
+        this.lessons = lessons;
     }
 
     public int getId() {
@@ -110,11 +139,11 @@ public class Student {
         this.priorKnowledge = priorKnowledge;
     }
 
-    public List<Interest> getInterests() {
+    public Set<Interest> getInterests() {
         return interests;
     }
 
-    public void setInterests(List<Interest> interests) {
+    public void setInterests(Set<Interest> interests) {
         this.interests = interests;
     }
 
@@ -134,4 +163,31 @@ public class Student {
         this.interests.add(interest);
     }
 
+    public int getTel() {
+        return tel;
+    }
+
+    public void setTel(int tel) {
+        this.tel = tel;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmailTutor() {
+        return emailTutor;
+    }
+
+    public void setEmailTutor(String emailTutor) {
+        this.emailTutor = emailTutor;
+    }
+
+    public StudentDTO toDTO(){
+        return new StudentDTO(this.name, this.jlptLevel, this.teacherAssigned.getId(), this.priorKnowledge, this.age, this.tel, this.email, this.emailTutor, this.interests, this.lessons);
+    }
 }

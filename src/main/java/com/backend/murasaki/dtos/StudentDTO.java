@@ -1,6 +1,11 @@
 package com.backend.murasaki.dtos;
 
+import com.backend.murasaki.models.Interest;
+import com.backend.murasaki.models.Lesson;
+
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 public class StudentDTO {
 
@@ -12,14 +17,29 @@ public class StudentDTO {
 
     private String priorKnowledge;
 
+    private int tel;
+
+    private String email;
+
+    private String emailTutor;
+
     private int age;
 
-    public StudentDTO(String name, int jlptLevel, int teacherAsignedId, String priorKnowledge, int age){
+    private Set<Interest> interests;
+
+    private List<Lesson> lessons;
+
+    public StudentDTO(String name, int jlptLevel, int teacherAsignedId, String priorKnowledge, int age, int tel, String email, String emailTutor, Set<Interest> interests, List<Lesson> lessons){
         this.name = name;
         this.jlptLevel = jlptLevel;
         this.teacherAsignedId = teacherAsignedId;
         this.priorKnowledge = priorKnowledge;
         this.age = age;
+        this.tel = tel;
+        this.email = email;
+        this.emailTutor = emailTutor;
+        this.interests = interests;
+        this.lessons = lessons;
     }
 
     public String getName() {
@@ -62,4 +82,43 @@ public class StudentDTO {
         this.age = age;
     }
 
+    public int getTel() {
+        return tel;
+    }
+
+    public void setTel(int tel) {
+        this.tel = tel;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmailTutor() {
+        return emailTutor;
+    }
+
+    public void setEmailTutor(String emailTutor) {
+        this.emailTutor = emailTutor;
+    }
+
+    public Set<Interest> getInterests() {
+        return interests;
+    }
+
+    public void setInterests(Set<Interest> interests) {
+        this.interests = interests;
+    }
+
+    public List<Lesson> getLessons() {
+        return lessons;
+    }
+
+    public void setLessons(List<Lesson> lessons) {
+        this.lessons = lessons;
+    }
 }

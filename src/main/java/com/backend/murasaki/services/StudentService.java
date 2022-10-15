@@ -15,9 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -41,8 +39,30 @@ public class StudentService {
     @Transactional
     public Student save(StudentDTO dto) {
         Teacher teacher = this.teacherService.findById(dto.getTeacherAsignedId());
-        Student student = new Student(dto.getName(), dto.getJlptLevel(), teacher, dto.getPriorKnowledge(), dto.getAge());
+        List<Integer> interestIds = dto.getInterests().stream().map(Interest::getId).toList();
+        Set<Interest> interests = this.interestService.findAll().stream().filter(interest -> interestIds.stream().anyMatch(i -> i == interest.getId())).collect(Collectors.toSet());
+        Student student = new Student(dto.getName(), dto.getJlptLevel(), teacher, dto.getPriorKnowledge(), dto.getAge(), dto.getTel(), dto.getEmail(), dto.getEmailTutor(), interests, new ArrayList<>());
         this.studentRepository.save(student);
+        return student;
+    }
+
+    @Transactional
+    public Student update(int student_id, StudentDTO dto){
+        Student student = this.findById(student_id);
+        student.setAge(dto.getAge());
+        student.setEmail(dto.getEmail());
+        student.setName(dto.getName());
+        student.setEmailTutor(dto.getEmailTutor());
+        student.setJlptLevel(dto.getJlptLevel());
+        student.setPriorKnowledge(dto.getPriorKnowledge());
+        student.setTel(dto.getTel());
+        if(student.getTeacherAssigned().getId() != dto.getTeacherAsignedId()){
+            Teacher teacher = this.teacherService.findById(dto.getTeacherAsignedId());
+            student.setTeacherAssigned(teacher);
+        }
+        List<Integer> interestIds = dto.getInterests().stream().map(Interest::getId).toList();
+        Set<Interest> interests = this.interestService.findAll().stream().filter(interest -> interestIds.stream().anyMatch(i -> i == interest.getId())).collect(Collectors.toSet());
+        student.setInterests(interests);
         return student;
     }
 
@@ -54,6 +74,11 @@ public class StudentService {
     @Transactional(readOnly = true)
     public Student findById(int student_id) {
         return this.studentRepository.findById(student_id).orElseThrow(() -> new NotFoundException("The requested Student was not found."));
+    }
+
+    @Transactional(readOnly = true)
+    public StudentDTO findByIdDTO(int student_id) {
+        return this.findById(student_id).toDTO();
     }
 
     @Transactional
@@ -88,6 +113,12 @@ public class StudentService {
 
     private boolean isInteger(String str){
         return Pattern.matches("-?[0-9]+", str);
+    }
+
+    @Transactional
+    public void delete(int student_id){
+        Student student = this.findById(student_id);
+        this.studentRepository.delete(student);
     }
 
 }

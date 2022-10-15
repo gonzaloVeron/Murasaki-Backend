@@ -26,14 +26,20 @@ public class StudentController {
 
     @GetMapping(path = "{student_id}")
     @ResponseBody
-    public Student getById(@PathVariable int student_id) {
-        return this.studentService.findById(student_id);
+    public StudentDTO getById(@PathVariable int student_id) {
+        return this.studentService.findByIdDTO(student_id);
     }
 
     @PostMapping(path = "")
     @ResponseBody
     public Student create(@RequestBody StudentDTO dto) {
         return this.studentService.save(dto);
+    }
+
+    @PutMapping(path = "{student_id}")
+    @ResponseBody
+    public Student update(@PathVariable int student_id, @RequestBody StudentDTO dto) {
+        return this.studentService.update(student_id, dto);
     }
 
     @PostMapping(path = "/addInterest")
@@ -48,9 +54,21 @@ public class StudentController {
         return this.studentService.addLesson(dto, student_id);
     }
 
-    @GetMapping(path = "/find/{search_text}/{page}/{size}")
+    @GetMapping(path = "/find/{search_text}")
     @ResponseBody
-    public Page<StudentDTOout> find(@PathVariable String search_text, @PathVariable int page, @PathVariable int size){
+    public Page<StudentDTOout> find(@PathVariable String search_text, @RequestParam int page, @RequestParam int size){
         return this.studentService.find(search_text, page, size);
     }
+
+    @GetMapping(path = "/find")
+    @ResponseBody
+    public Page<StudentDTOout> findAll(@RequestParam int page, @RequestParam int size){
+        return this.studentService.find("", page, size);
+    }
+
+    @DeleteMapping(path = "{student_id}")
+    public void delete(@PathVariable int student_id){
+        this.studentService.delete(student_id);
+    }
+
 }

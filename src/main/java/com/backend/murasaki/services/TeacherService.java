@@ -6,6 +6,9 @@ import com.backend.murasaki.models.Student;
 import com.backend.murasaki.models.Teacher;
 import com.backend.murasaki.repositories.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,8 +43,22 @@ public class TeacherService {
     }
 
     @Transactional(readOnly = true)
-    public Teacher findByNameFlex(String name){
-        return new Teacher();
+    public Page<Teacher> find(String search_text, int page, int size){
+        Pageable p = PageRequest.of(page, size);
+        return this.teacherRepository.findByNameLike(p, "%"+search_text+"%");
+    }
+
+    @Transactional
+    public void delete(int teacher_id){
+        Teacher teacher = this.findById(teacher_id);
+        this.teacherRepository.delete(teacher);
+    }
+
+    @Transactional
+    public Teacher update(int teacher_id, TeacherDTO dto){
+        Teacher teacher = this.findById(teacher_id);
+        teacher.setName(dto.getName());
+        return this.teacherRepository.save(teacher);
     }
 
 }
