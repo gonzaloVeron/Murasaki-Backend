@@ -1,5 +1,6 @@
 package com.backend.murasaki.exceptions;
 
+
 public class NotFoundException extends HttpErrorException {
 
     public NotFoundException(String message){

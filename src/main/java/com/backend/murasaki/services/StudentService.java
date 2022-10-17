@@ -104,6 +104,7 @@ public class StudentService {
         Pageable p = PageRequest.of(page, size);
         Page<StudentDTOout> students;
         if(this.isInteger(search_text)){
+            // Sacar duplicacion de .map
             students = this.studentRepository.findByJlptLevel(p, Integer.parseInt(search_text)).map(student -> new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getTeacherAssigned().toDTO()));
         }else{
             students = this.studentRepository.findByTeacherAssignedNameLike(p,"%"+search_text+"%").map(student -> new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getTeacherAssigned().toDTO()));
