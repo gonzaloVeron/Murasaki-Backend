@@ -1,0 +1,30 @@
+package com.backend.murasaki.services;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.stereotype.Service;
+
+import java.util.Properties;
+
+@Service
+public class SendMailService {
+
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+    public void sendMail(String from, String to, String subject, String body){
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setFrom(from);
+        mailMessage.setTo(to);
+        mailMessage.setSubject(subject);
+        mailMessage.setText(body);
+
+
+        javaMailSender.send(mailMessage);
+    }
+
+
+}

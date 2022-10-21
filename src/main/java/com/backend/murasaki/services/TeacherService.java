@@ -23,7 +23,7 @@ public class TeacherService {
 
     @Transactional
     public Teacher save(TeacherDTO dto) {
-        Teacher teacher = new Teacher(dto.getName(), new ArrayList<Student>());
+        Teacher teacher = new Teacher(dto.getName());
         return this.teacherRepository.save(teacher);
     }
 

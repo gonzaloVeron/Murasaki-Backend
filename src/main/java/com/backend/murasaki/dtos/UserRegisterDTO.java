@@ -4,14 +4,11 @@ public class UserRegisterDTO {
 
     private String email;
 
-    private String password;
+    private String name;
 
-    private int teacher_id;
-
-    public UserRegisterDTO(String email, String password, int teacher_id){
+    public UserRegisterDTO(String email, String name){
         this.email = email;
-        this.password = password;
-        this.teacher_id = teacher_id;
+        this.name = name;
     }
 
     public String getEmail() {
@@ -22,20 +19,12 @@ public class UserRegisterDTO {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getName() {
+        return name;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public int getTeacher_id() {
-        return teacher_id;
-    }
-
-    public void setTeacher_id(int teacher_id) {
-        this.teacher_id = teacher_id;
+    public void setName(String name) {
+        this.name = name;
     }
 
 }

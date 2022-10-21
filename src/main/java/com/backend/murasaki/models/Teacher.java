@@ -3,6 +3,7 @@ package com.backend.murasaki.models;
 import com.backend.murasaki.dtos.TeacherDTO;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Table(name = "teachers")
@@ -29,9 +30,9 @@ public class Teacher {
         this.students = students;
     }
 
-    public Teacher(String name, List<Student> students){
+    public Teacher(String name){
         this.name = name;
-        this.students = students;
+        this.students = new ArrayList<Student>();
     }
 
     public int getId() {
@@ -59,9 +60,7 @@ public class Teacher {
     }
 
     public TeacherDTO toDTO(){
-        TeacherDTO dto = new TeacherDTO();
-        dto.setName(this.name);
-        return dto;
+        return new TeacherDTO(this.name);
     }
 
 }

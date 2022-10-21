@@ -4,6 +4,7 @@ import com.backend.murasaki.dtos.UserCredentialsDTO;
 import com.backend.murasaki.dtos.UserLoggedDTO;
 import com.backend.murasaki.dtos.UserRegisterDTO;
 import com.backend.murasaki.models.User;
+import com.backend.murasaki.services.SendMailService;
 import com.backend.murasaki.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private SendMailService sendMailService;
+
     @PostMapping(path = "/login")
     @ResponseBody
     public UserLoggedDTO login(@RequestBody UserCredentialsDTO dto){
@@ -26,6 +30,11 @@ public class UserController {
     @ResponseBody
     public User register(@RequestBody UserRegisterDTO dto){
         return this.userService.register(dto);
+    }
+
+    @PostMapping(path="/test")
+    public void sendMail(){
+        this.sendMailService.sendMail("gonveron96@gmail.com", "gonveron96@gmail.com", "Testing", "Hola, buenas.");
     }
 
 }

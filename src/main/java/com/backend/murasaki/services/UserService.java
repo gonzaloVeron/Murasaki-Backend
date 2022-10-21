@@ -1,5 +1,6 @@
 package com.backend.murasaki.services;
 
+import com.backend.murasaki.dtos.TeacherDTO;
 import com.backend.murasaki.dtos.UserCredentialsDTO;
 import com.backend.murasaki.dtos.UserLoggedDTO;
 import com.backend.murasaki.dtos.UserRegisterDTO;
@@ -13,6 +14,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+import java.util.Random;
 
 @Service
 public class UserService {
@@ -30,8 +38,9 @@ public class UserService {
     private Environment env;
 
     public User register(UserRegisterDTO dto){
-        Teacher teacherFound = this.teacherService.findById(dto.getTeacher_id());
-        User user = new User(dto.getEmail(), this.hashPassword(dto.getPassword()), teacherFound);
+        TeacherDTO teacherDTO = new TeacherDTO(dto.getName());
+        Teacher teacherFound = this.teacherService.save(teacherDTO);
+        User user = new User(dto.getEmail(), this.hashPassword(this.generateSecureRandomPassword()), teacherFound);
         return this.userRepository.save(user);
     }
 
@@ -54,6 +63,26 @@ public class UserService {
         int strength = Integer.parseInt(env.getProperty("passHashSecret"));
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(strength, new SecureRandom());
         return bCryptPasswordEncoder.matches(rawPassword, encodedPassword);
+    }
+
+    /* ----------- */
+
+    private Stream<Character> getRandomSpecialChars(int count) {
+        Random random = new SecureRandom();
+        IntStream specialChars = random.ints(count, 33, 45);
+        return specialChars.mapToObj(data -> (char) data);
+    }
+
+    private String generateSecureRandomPassword() {
+        Stream<Character> pwdStream = Stream.concat(getRandomSpecialChars(2),
+                Stream.concat(getRandomSpecialChars(2),
+                        Stream.concat(getRandomSpecialChars(2), getRandomSpecialChars(4))));
+        List<Character> charList = pwdStream.collect(Collectors.toList());
+        Collections.shuffle(charList);
+        String password = charList.stream()
+                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
+                .toString();
+        return password;
     }
 
 }
