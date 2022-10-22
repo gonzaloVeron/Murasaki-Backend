@@ -32,6 +32,9 @@ public class UserService {
     private TeacherService teacherService;
 
     @Autowired
+    private SendMailService sendMailService;
+
+    @Autowired
     private JwtService jwtService;
 
     @Autowired
@@ -40,8 +43,13 @@ public class UserService {
     public User register(UserRegisterDTO dto){
         TeacherDTO teacherDTO = new TeacherDTO(dto.getName());
         Teacher teacherFound = this.teacherService.save(teacherDTO);
-        User user = new User(dto.getEmail(), this.hashPassword(this.generateSecureRandomPassword()), teacherFound);
-        return this.userRepository.save(user);
+        //User user = new User(dto.getEmail(), this.hashPassword(this.generateSecureRandomPassword()), teacherFound);
+        String randomPass = this.generateSecureRandomPassword();
+        User user = this.userRepository.save(new User(dto.getEmail(), this.hashPassword(randomPass), teacherFound));
+        this.sendMailService.sendMail(
+          "gonveron96@gmail.com", dto.getEmail(), "Murasaki", "Su password es: " + randomPass
+        );
+        return user;
     }
 
     public UserLoggedDTO authenticate(UserCredentialsDTO dto){
