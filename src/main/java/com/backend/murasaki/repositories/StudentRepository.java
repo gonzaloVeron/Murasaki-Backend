@@ -17,7 +17,7 @@ import java.util.Optional;
 @Repository
 public interface StudentRepository extends PagingAndSortingRepository<Student, Integer> {
 
-    @EntityGraph(attributePaths = {"teacherAssigned"})
+    @EntityGraph(attributePaths = {"teacherAssigned", "lessons"})
     Optional<Student> findById(Integer id);
 
     @EntityGraph(attributePaths = {"teacherAssigned"})

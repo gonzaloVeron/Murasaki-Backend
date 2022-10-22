@@ -1,6 +1,7 @@
 package com.backend.murasaki.controllers;
 
 import com.backend.murasaki.dtos.UserCredentialsDTO;
+import com.backend.murasaki.dtos.UserDTO;
 import com.backend.murasaki.dtos.UserLoggedDTO;
 import com.backend.murasaki.dtos.UserRegisterDTO;
 import com.backend.murasaki.models.User;
@@ -29,4 +30,9 @@ public class UserController {
         return this.userService.register(dto);
     }
 
+    @GetMapping(path = "/getByTeacherId/{teacher_id}")
+    @ResponseBody
+    public UserDTO findByTeacherId(@PathVariable int teacher_id){
+        return this.userService.findByTeacherId(teacher_id);
+    }
 }

@@ -5,6 +5,7 @@ import com.google.type.DateTime;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "lessons")
 @Entity
@@ -28,23 +29,28 @@ public class Lesson {
     @Column
     private String homework;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Link> links;
+
     public Lesson(){
 
     }
 
-    public Lesson(int id, Date date, int lessonNumber, String content, String homework){
+    public Lesson(int id, Date date, int lessonNumber, String content, String homework, List<Link> links){
         this.id = id;
         this.date = date;
         this.lessonNumber = lessonNumber;
         this.content = content;
         this.homework = homework;
+        this.links = links;
     }
 
-    public Lesson(Date date, int lessonNumber, String content, String homework){
+    public Lesson(Date date, int lessonNumber, String content, String homework, List<Link> links){
         this.date = date;
         this.lessonNumber = lessonNumber;
         this.content = content;
         this.homework = homework;
+        this.links = links;
     }
 
     public int getId() {
@@ -85,6 +91,14 @@ public class Lesson {
 
     public void setHomework(String homework) {
         this.homework = homework;
+    }
+
+    public List<Link> getLinks() {
+        return links;
+    }
+
+    public void setLinks(List<Link> links) {
+        this.links = links;
     }
 
 }

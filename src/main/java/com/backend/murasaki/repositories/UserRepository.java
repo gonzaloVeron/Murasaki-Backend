@@ -18,6 +18,9 @@ public interface UserRepository extends PagingAndSortingRepository<User, Integer
     @EntityGraph(attributePaths = {"teacher"})
     Optional<User> findByEmail(String email);
 
+    @EntityGraph(attributePaths = {"teacher"})
+    Optional<User> findByTeacher_id(Integer id);
+
     List<User> findAll();
 
 }

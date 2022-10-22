@@ -1,6 +1,7 @@
 package com.backend.murasaki.dtos;
 
 import java.util.Date;
+import java.util.List;
 
 public class LessonDTO {
 
@@ -12,15 +13,18 @@ public class LessonDTO {
 
     private String homework;
 
+    private List<LinkDTO> linkDTOS;
+
     public LessonDTO(){
 
     }
 
-    public LessonDTO(Date date, int lessonNumber, String content, String homework){
+    public LessonDTO(Date date, int lessonNumber, String content, String homework, List<LinkDTO> linkDTOS){
         this.date = date;
         this.lessonNumber = lessonNumber;
         this.content = content;
         this.homework = homework;
+        this.linkDTOS = linkDTOS;
     }
 
     public Date getDate() {
@@ -53,6 +57,14 @@ public class LessonDTO {
 
     public void setHomework(String homework) {
         this.homework = homework;
+    }
+
+    public List<LinkDTO> getLinkDTOS() {
+        return linkDTOS;
+    }
+
+    public void setLinkDTOS(List<LinkDTO> linkDTOS) {
+        this.linkDTOS = linkDTOS;
     }
 
 }

@@ -1,9 +1,7 @@
 package com.backend.murasaki.services;
 
-import com.backend.murasaki.dtos.TeacherDTO;
-import com.backend.murasaki.dtos.UserCredentialsDTO;
-import com.backend.murasaki.dtos.UserLoggedDTO;
-import com.backend.murasaki.dtos.UserRegisterDTO;
+import com.backend.murasaki.dtos.*;
+import com.backend.murasaki.exceptions.NotFoundException;
 import com.backend.murasaki.exceptions.UnauthorizedException;
 import com.backend.murasaki.models.Teacher;
 import com.backend.murasaki.models.User;
@@ -12,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.util.Collections;
@@ -40,10 +39,10 @@ public class UserService {
     @Autowired
     private Environment env;
 
+    @Transactional
     public User register(UserRegisterDTO dto){
         TeacherDTO teacherDTO = new TeacherDTO(dto.getName());
         Teacher teacherFound = this.teacherService.save(teacherDTO);
-        //User user = new User(dto.getEmail(), this.hashPassword(this.generateSecureRandomPassword()), teacherFound);
         String randomPass = this.generateSecureRandomPassword();
         User user = this.userRepository.save(new User(dto.getEmail(), this.hashPassword(randomPass), teacherFound));
         this.sendMailService.sendMail(
@@ -52,6 +51,7 @@ public class UserService {
         return user;
     }
 
+    @Transactional
     public UserLoggedDTO authenticate(UserCredentialsDTO dto){
         User userFound = this.userRepository.findByEmail(dto.getEmail()).orElseThrow(() -> new UnauthorizedException("Credenciales inválidas"));
         if(!this.matchPassword(dto.getPassword(), userFound.getPassword())){
@@ -60,10 +60,15 @@ public class UserService {
         return new UserLoggedDTO(userFound, userFound.getTeacher().getName(), this.jwtService.create(userFound.getId()));
     }
 
-    public String hashPassword(String password){
+    @Transactional(readOnly = true)
+    public UserDTO findByTeacherId(int id){
+        User user = this.userRepository.findByTeacher_id(id).orElseThrow(() -> new NotFoundException("The requested teacher was not found."));
+        return new UserDTO(user.getEmail(), user.getTeacher().getName());
+    }
+
+    private String hashPassword(String password){
         int strength = Integer.parseInt(env.getProperty("passHashSecret"));
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(strength, new SecureRandom());
-        //String encodedPassword = bCryptPasswordEncoder.encode(password);
         return  bCryptPasswordEncoder.encode(password);
     }
 

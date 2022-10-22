@@ -2,10 +2,7 @@ package com.backend.murasaki.services;
 
 import com.backend.murasaki.dtos.*;
 import com.backend.murasaki.exceptions.NotFoundException;
-import com.backend.murasaki.models.Interest;
-import com.backend.murasaki.models.Lesson;
-import com.backend.murasaki.models.Student;
-import com.backend.murasaki.models.Teacher;
+import com.backend.murasaki.models.*;
 import com.backend.murasaki.repositories.LessonRepository;
 import com.backend.murasaki.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -92,7 +90,9 @@ public class StudentService {
     @Transactional
     public Student addLesson(LessonDTO dto, int student_id){
         Student student = this.findById(student_id);
-        Lesson lesson = new Lesson(dto.getDate(), dto.getLessonNumber(), dto.getContent(), dto.getHomework());
+        ArrayList<Link> links = new ArrayList<Link>(dto.getLinkDTOS().stream().map(dTo -> new Link(dTo.getTitle(), dTo.getUrl())).toList());
+        //List<Link> links = dto.getLinkDTOS().stream().map(dTo -> new Link(dTo.getTitle(), dTo.getUrl())).toList();
+        Lesson lesson = new Lesson(dto.getDate(), dto.getLessonNumber(), dto.getContent(), dto.getHomework(), links);
         this.lessonRepository.save(lesson);
         student.addLesson(lesson);
         return this.studentRepository.save(student);
