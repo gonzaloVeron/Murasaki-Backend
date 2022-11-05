@@ -15,19 +15,19 @@ public class LessonController {
     @Autowired
     private LessonService lessonService;
 
-    @GetMapping("")
+    @GetMapping(path = "")
     @ResponseBody
     public List<Lesson> getAll() {
         return this.lessonService.findAll();
     }
 
-    @GetMapping("{lesson_id}")
+    @GetMapping(path = "{lesson_id}")
     @ResponseBody
     public Lesson getById(@PathVariable int homework_id) {
         return this.lessonService.findById(homework_id);
     }
 
-    @PostMapping("")
+    @PostMapping(path = "")
     @ResponseBody
     public Lesson create(@RequestBody LessonDTO dto) {
         return this.lessonService.save(dto);

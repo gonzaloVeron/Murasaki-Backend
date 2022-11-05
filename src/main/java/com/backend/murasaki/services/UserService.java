@@ -51,7 +51,12 @@ public class UserService {
         return user;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
+    public User findById(int user_id){
+        return this.userRepository.findById(user_id).orElseThrow(() -> new NotFoundException("The user requested was now found"));
+    }
+
+    @Transactional(readOnly = true)
     public UserLoggedDTO authenticate(UserCredentialsDTO dto){
         User userFound = this.userRepository.findByEmail(dto.getEmail()).orElseThrow(() -> new UnauthorizedException("Credenciales inválidas"));
         if(!this.matchPassword(dto.getPassword(), userFound.getPassword())){
@@ -62,8 +67,27 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserDTO findByTeacherId(int id){
-        User user = this.userRepository.findByTeacher_id(id).orElseThrow(() -> new NotFoundException("The requested teacher was not found."));
+        User user = this.userRepository.findByTeacher_id(id).orElseThrow(() -> new NotFoundException("The requested user was not found."));
         return new UserDTO(user.getEmail(), user.getTeacher().getName());
+    }
+
+    @Transactional(readOnly = true)
+    public void sendRecoveryEmail(String email){
+        User userFound = this.userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("The requested user was not found."));
+        String token = this.jwtService.create(userFound.getId());
+        this.sendMailService.sendMail(
+                "gonveron96@gmail.com",
+                email,
+                "Murasaki - Recuperar contraseña",
+                "Por favor, entre en el siguiente enlace para cambiar su contraseña " + "http://localhost:4200/auth/changePassword/" + token
+        );
+    }
+
+    @Transactional
+    public void changeUserPassword(int id, String password){
+        User userFound = this.userRepository.findById(id).orElseThrow(() -> new NotFoundException("The requested user was not found."));
+        userFound.setPassword(this.hashPassword(password));
+        this.userRepository.save(userFound);
     }
 
     private String hashPassword(String password){

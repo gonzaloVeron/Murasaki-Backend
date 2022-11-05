@@ -24,8 +24,13 @@ public class Interest {
     public Interest(){
 
     }
-
     public Interest(String name, String icon){
+        this.name = name;
+        this.icon = icon;
+    }
+
+    public Interest(int id, String name, String icon){
+        this.id = id;
         this.name = name;
         this.icon = icon;
     }

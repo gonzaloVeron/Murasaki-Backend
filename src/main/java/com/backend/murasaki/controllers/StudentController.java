@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,28 +19,30 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @GetMapping(path = "")
+    @GetMapping(path = "/jwt")
     @ResponseBody
     public List<StudentDTOout> getAll() {
-        return this.studentService.findAll().stream().map(student -> new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getTeacherAssigned().toDTO())).collect(Collectors.toList());
+        return this.studentService.findAll().stream().map(student -> new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getEmail(), student.getTel(), student.getTeacherAssigned().toDTO())).collect(Collectors.toList());
     }
 
-    @GetMapping(path = "{student_id}")
+    @GetMapping(path = "/jwt/{student_id}")
     @ResponseBody
     public StudentDTO getById(@PathVariable int student_id) {
         return this.studentService.findByIdDTO(student_id);
     }
 
-    @PostMapping(path = "")
+    @PostMapping(path = "/jwt")
     @ResponseBody
-    public Student create(@RequestBody StudentDTO dto) {
-        return this.studentService.save(dto);
+    public Student create(HttpServletRequest request, @RequestBody StudentDTO dto) {
+        int user_id = (int)request.getAttribute("user_id");
+        return this.studentService.save(user_id, dto);
     }
 
-    @PutMapping(path = "{student_id}")
+    @PutMapping(path = "/jwt/{student_id}")
     @ResponseBody
-    public Student update(@PathVariable int student_id, @RequestBody StudentDTO dto) {
-        return this.studentService.update(student_id, dto);
+    public Student update(HttpServletRequest request, @PathVariable int student_id, @RequestBody StudentDTO dto) {
+        int user_id = (int)request.getAttribute("user_id");
+        return this.studentService.update(user_id, student_id, dto);
     }
 
     @PostMapping(path = "/addInterest")
@@ -48,22 +51,24 @@ public class StudentController {
         return this.studentService.addInterest(dto);
     }
 
-    @PostMapping(path = "/addLesson/{student_id}")
+    @PostMapping(path = "/jwt/addLesson/{student_id}")
     @ResponseBody
     public Student addLesson(@RequestBody LessonDTO dto, @PathVariable int student_id){
         return this.studentService.addLesson(dto, student_id);
     }
 
-    @GetMapping(path = "/find/{search_text}")
+    @GetMapping(path = "/jwt/find/{search_text}")
     @ResponseBody
-    public Page<StudentDTOout> find(@PathVariable String search_text, @RequestParam int page, @RequestParam int size){
-        return this.studentService.find(search_text, page, size);
+    public Page<StudentDTOout> find(HttpServletRequest request, @PathVariable String search_text, @RequestParam int page, @RequestParam int size){
+        int user_id = (int)request.getAttribute("user_id");
+        return this.studentService.find(user_id, search_text, page, size);
     }
 
-    @GetMapping(path = "/find")
+    @GetMapping(path = "/jwt/find")
     @ResponseBody
-    public Page<StudentDTOout> findAll(@RequestParam int page, @RequestParam int size){
-        return this.studentService.find("", page, size);
+    public Page<StudentDTOout> findAll(HttpServletRequest request, @RequestParam int page, @RequestParam int size){
+        int user_id = (int)request.getAttribute("user_id");
+        return this.studentService.find(user_id, "", page, size);
     }
 
     @DeleteMapping(path = "{student_id}")

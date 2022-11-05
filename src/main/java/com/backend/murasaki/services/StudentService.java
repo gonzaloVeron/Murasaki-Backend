@@ -32,11 +32,15 @@ public class StudentService {
     private InterestService interestService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private LessonRepository lessonRepository; // plantear mejor solucion para usar el service
 
     @Transactional
-    public Student save(StudentDTO dto) {
-        Teacher teacher = this.teacherService.findById(dto.getTeacherAsignedId());
+    public Student save(int user_id, StudentDTO dto) {
+        User user = this.userService.findById(user_id);
+        Teacher teacher = this.teacherService.findById(user.getTeacher().getId());
         List<Integer> interestIds = dto.getInterests().stream().map(Interest::getId).toList();
         Set<Interest> interests = this.interestService.findAll().stream().filter(interest -> interestIds.stream().anyMatch(i -> i == interest.getId())).collect(Collectors.toSet());
         Student student = new Student(dto.getName(), dto.getJlptLevel(), teacher, dto.getPriorKnowledge(), dto.getAge(), dto.getTel(), dto.getEmail(), dto.getEmailTutor(), interests, new ArrayList<>());
@@ -45,7 +49,9 @@ public class StudentService {
     }
 
     @Transactional
-    public Student update(int student_id, StudentDTO dto){
+    public Student update(int user_id, int student_id, StudentDTO dto){
+        User userFound = this.userService.findById(user_id);
+        dto.setTeacherAsignedId(userFound.getTeacher().getId());
         Student student = this.findById(student_id);
         student.setAge(dto.getAge());
         student.setEmail(dto.getEmail());
@@ -99,17 +105,17 @@ public class StudentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<StudentDTOout> find(String search_text, int page, int size){
+    public Page<StudentDTOout> find(int user_id, String search_text, int page, int size){
         //Pageable page = PageRequest.of(1, 2, Sort.by("name"));
         Pageable p = PageRequest.of(page, size);
-        Page<StudentDTOout> students;
+        Page<Student> students;
+        User user = this.userService.findById(user_id);
         if(this.isInteger(search_text)){
-            // Sacar duplicacion de .map
-            students = this.studentRepository.findByJlptLevel(p, Integer.parseInt(search_text)).map(student -> new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getTeacherAssigned().toDTO()));
+            students = this.studentRepository.findByJlptLevelAndTeacherAssigned(p, Integer.parseInt(search_text), user.getTeacher());
         }else{
-            students = this.studentRepository.findByTeacherAssignedNameLike(p,"%"+search_text+"%").map(student -> new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getTeacherAssigned().toDTO()));
+            students = this.studentRepository.findByNameLikeAndTeacherAssigned(p,"%"+search_text+"%", user.getTeacher());
         }
-        return students;
+        return students.map(student -> new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getEmail(), student.getTel(), student.getTeacherAssigned().toDTO()));
     }
 
     private boolean isInteger(String str){

@@ -16,7 +16,6 @@ import java.util.Optional;
 @Repository
 public interface TeacherRepository extends PagingAndSortingRepository<Teacher, Integer> {
 
-    //@EntityGraph(attributePaths = {"teacherAssigned"}) Perfecto para el error handler
     Optional<Teacher> findById(Integer id);
 
     List<Teacher> findAll();

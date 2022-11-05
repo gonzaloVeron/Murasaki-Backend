@@ -27,6 +27,9 @@ public interface StudentRepository extends PagingAndSortingRepository<Student, I
     Page<Student> findByJlptLevel(Pageable pageable, int jlptLevel);
 
     @EntityGraph(attributePaths = {"teacherAssigned"})
-    Page<Student> findByTeacherAssignedNameLike(Pageable pageable, String name);
+    Page<Student> findByJlptLevelAndTeacherAssigned(Pageable pageable, int jlptLevel, Teacher teacher);
+
+    @EntityGraph(attributePaths = {"teacherAssigned"})
+    Page<Student> findByNameLikeAndTeacherAssigned(Pageable pageable, String name, Teacher teacher);
 
 }
