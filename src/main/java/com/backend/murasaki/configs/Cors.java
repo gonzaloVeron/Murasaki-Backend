@@ -33,6 +33,9 @@ public class Cors extends WebSecurityConfigurerAdapter {
                 .permitAll();
 //                .anyRequest()
 //                .authenticated();
+
+        http.csrf().disable();
+        http.headers().frameOptions().disable();
     }
 
     @Bean

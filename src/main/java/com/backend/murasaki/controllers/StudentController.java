@@ -45,11 +45,11 @@ public class StudentController {
         return this.studentService.update(user_id, student_id, dto);
     }
 
-    @PostMapping(path = "/addInterest")
-    @ResponseBody
-    public Student addInterest(@RequestBody AddInterestDTO dto){
-        return this.studentService.addInterest(dto);
-    }
+//    @PostMapping(path = "/addInterest")
+//    @ResponseBody
+//    public Student addInterest(@RequestBody AddInterestDTO dto){
+//        return this.studentService.addInterest(dto);
+//    }
 
     @PostMapping(path = "/jwt/addLesson/{student_id}")
     @ResponseBody
@@ -71,7 +71,7 @@ public class StudentController {
         return this.studentService.find(user_id, "", page, size);
     }
 
-    @DeleteMapping(path = "{student_id}")
+    @DeleteMapping(path = "/jwt/{student_id}")
     public void delete(@PathVariable int student_id){
         this.studentService.delete(student_id);
     }

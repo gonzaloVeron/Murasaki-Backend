@@ -23,14 +23,14 @@ public class LessonController {
 
     @GetMapping(path = "{lesson_id}")
     @ResponseBody
-    public Lesson getById(@PathVariable int homework_id) {
-        return this.lessonService.findById(homework_id);
+    public Lesson getById(@PathVariable int lesson_id) {
+        return this.lessonService.findById(lesson_id);
     }
 
-    @PostMapping(path = "")
-    @ResponseBody
-    public Lesson create(@RequestBody LessonDTO dto) {
-        return this.lessonService.save(dto);
-    }
+//    @PostMapping(path = "")
+//    @ResponseBody
+//    public Lesson create(@RequestBody LessonDTO dto) {
+//        return this.lessonService.save(dto);
+//    }
 
 }

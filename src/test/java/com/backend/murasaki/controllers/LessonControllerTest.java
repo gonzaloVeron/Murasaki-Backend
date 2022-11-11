@@ -1,6 +1,7 @@
 package com.backend.murasaki.controllers;
 
 import com.backend.murasaki.dtos.LessonDTO;
+import com.backend.murasaki.interceptors.JwtInterceptor;
 import com.backend.murasaki.models.Lesson;
 import com.backend.murasaki.models.Link;
 import com.backend.murasaki.services.JwtService;
@@ -14,7 +15,9 @@ import static org.mockito.Mockito.*;
 import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,59 +33,55 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(SpringExtension.class)
-@ImportAutoConfiguration(JwtService.class)
-@WebMvcTest(LessonController.class)
+@AutoConfigureMockMvc
+@SpringBootTest
 class LessonControllerTest {
+
+    @MockBean
+    JwtInterceptor interceptor;
 
     @Autowired
     private MockMvc mvc;
 
-    @MockBean
-    private LessonService lessonService;
-
-    private List<Lesson> testLessons;
-
-    private Lesson testLesson;
-
-    private Date date;
-
     @BeforeEach
-    void setUp() {
-        date = new Date();
-        testLessons = new ArrayList<Lesson>();
-        testLesson = new Lesson(5, new Date(), 2, "content", "homework", new ArrayList<Link>());
-        testLessons.add(testLesson);
-
-        when(lessonService.findAll()).thenReturn(testLessons);
-        when(lessonService.findById(5)).thenReturn(testLesson);
-        when(lessonService.save(ArgumentMatchers.any(LessonDTO.class))).thenReturn(testLesson);
+    void setUp() throws Exception {
+        when(interceptor.preHandle(any(), any(), any())).thenReturn(true);
     }
 
     @Test
     void getAllTest() throws Exception {
-        String pattern = "yyyy-MM-dd";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        String stringDate = simpleDateFormat.format(date);
         this.mvc.perform(get("/api/v1/lesson"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[*].id").value(5))
-                .andExpect(jsonPath("$[*].date").value(stringDate))
-                .andExpect(jsonPath("$[*].lessonNumber").value(2))
-                .andExpect(jsonPath("$[*].content").value("content"))
-                .andExpect(jsonPath("$[*].homework").value("homework"))
+                .andExpect(jsonPath("$.length()").value(4))
+                .andExpect(jsonPath("$[?(@.id == '%s')]", 31).exists())
+                .andExpect(jsonPath("$[?(@.date == '%s')]", "2022-11-04").exists())
+                .andExpect(jsonPath("$[?(@.lessonNumber == '%s')]", 0).exists())
+                .andExpect(jsonPath("$[?(@.content == '%s')]", "Hablamos sobre sus intereses y aspiraciones con respecto al estudio de japonés y empezamos a ver sobre los Kanji.").exists())
+                .andExpect(jsonPath("$[?(@.homework == '%s')]", "Dejé tres Kanji para que traduzca.").exists())
                 .andExpect(jsonPath("$[?(@.links)]").isArray());
     }
 
     @Test
-    void getById() {
+    void getByExistentId() throws Exception {
+        this.mvc.perform(get("/api/v1/lesson/{lesson_id}", 19))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(19))
+                .andExpect(jsonPath("$.date").value("2022-11-04"))
+                .andExpect(jsonPath("$.lessonNumber").value(0))
+                .andExpect(jsonPath("$.content").value("test"))
+                .andExpect(jsonPath("$.homework").value("test"))
+                .andExpect(jsonPath("$.links").isArray());
     }
 
     @Test
-    void create() {
+    void getByInexistentIdTest() throws Exception {
+        this.mvc.perform(get("/api/v1/lesson/{lesson_id}", 66))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
+
 
 }
