@@ -9,10 +9,14 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.*;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -28,6 +32,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
+@TestPropertySource(locations="classpath:test.properties")
+@AutoConfigureTestDatabase(replace = Replace.ANY)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @SpringBootTest
 class TeacherControllerTest {
 
@@ -50,7 +57,7 @@ class TeacherControllerTest {
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$.length()").value(3))
                 .andExpect(jsonPath("$[?(@.name == '%s')]", "Julian Borja").exists())
-                .andExpect(jsonPath("$[?(@.name == '%s')]", "Mariana Borja").exists())
+                .andExpect(jsonPath("$[?(@.name == '%s')]", "Gonzalo G. Verón").exists())
                 .andExpect(jsonPath("$[?(@.name == '%s')]", "Test").exists());
     }
 
@@ -88,7 +95,7 @@ class TeacherControllerTest {
                 .andExpect(jsonPath("$.content").isArray())
                 .andExpect(jsonPath("$.content.length()").value(3))
                 .andExpect(jsonPath("$.content[?(@.name == '%s')]", "Julian Borja").exists())
-                .andExpect(jsonPath("$.content[?(@.name == '%s')]", "Mariana Borja").exists())
+                .andExpect(jsonPath("$.content[?(@.name == '%s')]", "Gonzalo G. Verón").exists())
                 .andExpect(jsonPath("$.content[?(@.name == '%s')]", "Test").exists());
     }
 
