@@ -190,4 +190,9 @@ public class Student {
     public StudentDTO toDTO(){
         return new StudentDTO(this.name, this.jlptLevel, this.teacherAssigned.getId(), this.priorKnowledge, this.age, this.tel, this.email, this.emailTutor, this.interests, this.lessons);
     }
+
+    public void deleteLesson(Lesson lesson){
+        this.lessons.remove(lesson);
+    }
+
 }

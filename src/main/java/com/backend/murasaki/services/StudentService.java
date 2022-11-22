@@ -128,4 +128,12 @@ public class StudentService {
         this.studentRepository.delete(student);
     }
 
+    @Transactional
+    public void removeLesson(int student_id, int lesson_id){
+        Student studentFound = this.findById(student_id);
+        Lesson lessonFound = studentFound.getLessons().stream().filter(lesson -> lesson.getId() == lesson_id).findFirst().orElseThrow(() -> new NotFoundException("The requested Lesson was not found."));
+        studentFound.deleteLesson(lessonFound);
+        this.studentRepository.save(studentFound);
+    }
+
 }

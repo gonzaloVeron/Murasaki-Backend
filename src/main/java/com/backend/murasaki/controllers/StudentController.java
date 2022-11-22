@@ -57,6 +57,11 @@ public class StudentController {
         return this.studentService.addLesson(dto, student_id);
     }
 
+    @PutMapping(path = "/jwt/{student_id}/{lesson_id}")
+    public void removeLesson(@PathVariable int student_id, @PathVariable int lesson_id){
+        this.studentService.removeLesson(student_id, lesson_id);
+    }
+
     @GetMapping(path = "/jwt/find/{search_text}")
     @ResponseBody
     public Page<StudentDTOout> find(HttpServletRequest request, @PathVariable String search_text, @RequestParam int page, @RequestParam int size){

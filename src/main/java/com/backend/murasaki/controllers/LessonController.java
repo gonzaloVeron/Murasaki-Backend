@@ -27,10 +27,10 @@ public class LessonController {
         return this.lessonService.findById(lesson_id);
     }
 
-//    @PostMapping(path = "")
-//    @ResponseBody
-//    public Lesson create(@RequestBody LessonDTO dto) {
-//        return this.lessonService.save(dto);
-//    }
+    @PutMapping(path = "/jwt/{lesson_id}")
+    @ResponseBody
+    public Lesson updateLesson(@PathVariable int lesson_id, @RequestBody LessonDTO dto){
+        return this.lessonService.update(lesson_id, dto);
+    }
 
 }
