@@ -55,7 +55,7 @@ class UserControllerTest {
         Object obj = new Object() {
 
             public String email = "gonveron96@gmail.com";
-
+//asd
             public String password = "aaaa";
 
         };
