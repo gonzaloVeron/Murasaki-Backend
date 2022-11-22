@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">murasaki</a> &gt; <a href="index.source.html" class="el_package">com.backend.murasaki.services</a> &gt; <span class="el_source">UserService.java</span></div><h1>UserService.java</h1><pre class="source lang-java linenums">package com.backend.murasaki.services;
+
+import com.backend.murasaki.dtos.*;
+import com.backend.murasaki.exceptions.NotFoundException;
+import com.backend.murasaki.exceptions.UnauthorizedException;
+import com.backend.murasaki.models.Teacher;
+import com.backend.murasaki.models.User;
+import com.backend.murasaki.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.security.SecureRandom;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+import java.util.Random;
+
+@Service
+<span class="fc" id="L25">public class UserService {</span>
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private TeacherService teacherService;
+
+    @Autowired
+    private SendMailService sendMailService;
+
+    @Autowired
+    private JwtService jwtService;
+
+    @Autowired
+    private Environment env;
+
+    @Transactional
+    public User register(UserRegisterDTO dto){
+<span class="fc" id="L44">        TeacherDTO teacherDTO = new TeacherDTO(dto.getName());</span>
+<span class="fc" id="L45">        Teacher teacherFound = this.teacherService.save(teacherDTO);</span>
+<span class="fc" id="L46">        String randomPass = this.generateSecureRandomPassword();</span>
+<span class="fc" id="L47">        User user = this.userRepository.save(new User(dto.getEmail(), this.hashPassword(randomPass), teacherFound));</span>
+<span class="fc" id="L48">        this.sendMailService.sendMail(</span>
+<span class="fc" id="L49">          &quot;gonveron96@gmail.com&quot;, dto.getEmail(), &quot;Murasaki&quot;, &quot;Su password es: &quot; + randomPass</span>
+        );
+<span class="fc" id="L51">        return user;</span>
+    }
+
+    @Transactional(readOnly = true)
+    public User findById(int user_id){
+<span class="pc" id="L56">        return this.userRepository.findById(user_id).orElseThrow(() -&gt; new NotFoundException(&quot;The user requested was now found&quot;));</span>
+    }
+
+    @Transactional(readOnly = true)
+    public UserLoggedDTO authenticate(UserCredentialsDTO dto){
+<span class="pc" id="L61">        User userFound = this.userRepository.findByEmail(dto.getEmail()).orElseThrow(() -&gt; new UnauthorizedException(&quot;Credenciales inválidas&quot;));</span>
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        if(!this.matchPassword(dto.getPassword(), userFound.getPassword())){</span>
+<span class="nc" id="L63">            throw new UnauthorizedException(&quot;Credenciales inválidas&quot;);</span>
+        }
+<span class="fc" id="L65">        return new UserLoggedDTO(userFound, userFound.getTeacher().getName(), this.jwtService.create(userFound.getId()));</span>
+    }
+
+    @Transactional(readOnly = true)
+    public UserDTO findByTeacherId(int id){
+<span class="pc" id="L70">        User user = this.userRepository.findByTeacher_id(id).orElseThrow(() -&gt; new NotFoundException(&quot;The requested user was not found.&quot;));</span>
+<span class="fc" id="L71">        return new UserDTO(user.getEmail(), user.getTeacher().getName());</span>
+    }
+
+    @Transactional(readOnly = true)
+    public void sendRecoveryEmail(String email){
+<span class="nc" id="L76">        User userFound = this.userRepository.findByEmail(email).orElseThrow(() -&gt; new NotFoundException(&quot;The requested user was not found.&quot;));</span>
+<span class="nc" id="L77">        String token = this.jwtService.create(userFound.getId());</span>
+<span class="nc" id="L78">        this.sendMailService.sendMail(</span>
+                &quot;gonveron96@gmail.com&quot;,
+                email,
+                &quot;Murasaki - Recuperar contraseña&quot;,
+                &quot;Por favor, entre en el siguiente enlace para cambiar su contraseña &quot; + &quot;http://localhost:4200/auth/changePassword/&quot; + token
+        );
+<span class="nc" id="L84">    }</span>
+
+    @Transactional
+    public void changeUserPassword(int id, String password){
+<span class="nc" id="L88">        User userFound = this.userRepository.findById(id).orElseThrow(() -&gt; new NotFoundException(&quot;The requested user was not found.&quot;));</span>
+<span class="nc" id="L89">        userFound.setPassword(this.hashPassword(password));</span>
+<span class="nc" id="L90">        this.userRepository.save(userFound);</span>
+<span class="nc" id="L91">    }</span>
+
+    private String hashPassword(String password){
+<span class="fc" id="L94">        int strength = Integer.parseInt(env.getProperty(&quot;passHashSecret&quot;));</span>
+<span class="fc" id="L95">        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(strength, new SecureRandom());</span>
+<span class="fc" id="L96">        return  bCryptPasswordEncoder.encode(password);</span>
+    }
+
+    private boolean matchPassword(String rawPassword, String encodedPassword){
+<span class="fc" id="L100">        int strength = Integer.parseInt(env.getProperty(&quot;passHashSecret&quot;));</span>
+<span class="fc" id="L101">        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(strength, new SecureRandom());</span>
+<span class="fc" id="L102">        return bCryptPasswordEncoder.matches(rawPassword, encodedPassword);</span>
+    }
+
+    /* ----------- */
+
+    private Stream&lt;Character&gt; getRandomSpecialChars(int count) {
+<span class="fc" id="L108">        Random random = new SecureRandom();</span>
+<span class="fc" id="L109">        IntStream specialChars = random.ints(count, 33, 45);</span>
+<span class="fc" id="L110">        return specialChars.mapToObj(data -&gt; (char) data);</span>
+    }
+
+    private String generateSecureRandomPassword() {
+<span class="fc" id="L114">        Stream&lt;Character&gt; pwdStream = Stream.concat(getRandomSpecialChars(2),</span>
+<span class="fc" id="L115">                Stream.concat(getRandomSpecialChars(2),</span>
+<span class="fc" id="L116">                        Stream.concat(getRandomSpecialChars(2), getRandomSpecialChars(4))));</span>
+<span class="fc" id="L117">        List&lt;Character&gt; charList = pwdStream.collect(Collectors.toList());</span>
+<span class="fc" id="L118">        Collections.shuffle(charList);</span>
+<span class="fc" id="L119">        String password = charList.stream()</span>
+<span class="fc" id="L120">                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)</span>
+<span class="fc" id="L121">                .toString();</span>
+<span class="fc" id="L122">        return password;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

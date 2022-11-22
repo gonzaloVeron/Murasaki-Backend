@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TeacherController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">murasaki</a> &gt; <a href="index.source.html" class="el_package">com.backend.murasaki.controllers</a> &gt; <span class="el_source">TeacherController.java</span></div><h1>TeacherController.java</h1><pre class="source lang-java linenums">package com.backend.murasaki.controllers;
+
+import com.backend.murasaki.dtos.TeacherDTO;
+import com.backend.murasaki.models.Teacher;
+import com.backend.murasaki.services.TeacherService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(&quot;api/v1/teacher&quot;)
+<span class="fc" id="L14">public class TeacherController {</span>
+
+    @Autowired
+    private TeacherService teacherService;
+
+    @PostMapping(path = &quot;&quot;)
+    @ResponseBody
+    public Teacher create(@RequestBody TeacherDTO dto) {
+<span class="fc" id="L22">        return this.teacherService.save(dto);</span>
+    }
+
+    @GetMapping(path = &quot;&quot;)
+    @ResponseBody
+    public List&lt;Teacher&gt; getAll(){
+<span class="fc" id="L28">        return this.teacherService.findAll();</span>
+    }
+
+    @GetMapping(path = &quot;{teacher_id}&quot;)
+    @ResponseBody
+    public Teacher getById(@PathVariable int teacher_id) {
+<span class="fc" id="L34">        return this.teacherService.findById(teacher_id);</span>
+    }
+
+    @GetMapping(path = &quot;/find/{search_text}&quot;)
+    @ResponseBody
+    public Page&lt;Teacher&gt; find(@PathVariable String search_text, @RequestParam int page, @RequestParam int size){
+<span class="fc" id="L40">        return this.teacherService.find(search_text, page, size);</span>
+    }
+
+    @GetMapping(path = &quot;/find&quot;)
+    @ResponseBody
+    public Page&lt;Teacher&gt; findAll(@RequestParam int page, @RequestParam int size){
+<span class="fc" id="L46">        return this.teacherService.find(&quot;&quot;, page, size);</span>
+    }
+
+    @DeleteMapping(path = &quot;{teacher_id}&quot;)
+    public void delete(@PathVariable int teacher_id){
+<span class="fc" id="L51">        this.teacherService.delete(teacher_id);</span>
+<span class="fc" id="L52">    }</span>
+
+    @PutMapping(path = &quot;{teacher_id}&quot;)
+    @ResponseBody
+    public Teacher update(@PathVariable int teacher_id, @RequestBody TeacherDTO dto) {
+<span class="fc" id="L57">        return this.teacherService.update(teacher_id, dto);</span>
+    }
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

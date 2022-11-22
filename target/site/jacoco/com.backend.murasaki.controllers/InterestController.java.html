@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InterestController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">murasaki</a> &gt; <a href="index.source.html" class="el_package">com.backend.murasaki.controllers</a> &gt; <span class="el_source">InterestController.java</span></div><h1>InterestController.java</h1><pre class="source lang-java linenums">package com.backend.murasaki.controllers;
+
+import com.backend.murasaki.dtos.InterestDTO;
+import com.backend.murasaki.exceptions.NotFoundException;
+import com.backend.murasaki.models.Interest;
+import com.backend.murasaki.services.InterestService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(&quot;/api/v1/interest&quot;)
+<span class="fc" id="L15">public class InterestController {</span>
+
+    @Autowired
+    private InterestService interestService;
+
+    @GetMapping(path = &quot;/jwt&quot;)
+    @ResponseBody
+    public List&lt;Interest&gt; getAll() {
+<span class="fc" id="L23">        return this.interestService.findAll();</span>
+    }
+
+    @GetMapping(path = &quot;/jwt/{interest_id}&quot;)
+    @ResponseBody
+    public Interest getById(@PathVariable int interest_id) throws NotFoundException {
+<span class="fc" id="L29">        return this.interestService.findById(interest_id);</span>
+    }
+
+    @PostMapping(path = &quot;/jwt&quot;)
+    @ResponseBody
+    public Interest create(@RequestBody InterestDTO dto) {
+<span class="fc" id="L35">        return this.interestService.save(dto);</span>
+    }
+
+    @GetMapping(path = &quot;/jwt/find/{search_text}&quot;)
+    @ResponseBody
+    public Page&lt;Interest&gt; find(@PathVariable String search_text, @RequestParam int page, @RequestParam int size){
+<span class="fc" id="L41">        return this.interestService.find(search_text, page, size);</span>
+    }
+
+    @GetMapping(path = &quot;/jwt/find&quot;)
+    @ResponseBody
+    public Page&lt;Interest&gt; findAll(@RequestParam int page, @RequestParam int size){
+<span class="fc" id="L47">        return this.interestService.find(&quot;&quot;, page, size);</span>
+    }
+
+    @DeleteMapping(path = &quot;/jwt/{interest_id}&quot;)
+    public void delete(@PathVariable int interest_id){
+<span class="fc" id="L52">        this.interestService.delete(interest_id);</span>
+<span class="fc" id="L53">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserLoggedDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">murasaki</a> &gt; <a href="index.source.html" class="el_package">com.backend.murasaki.dtos</a> &gt; <span class="el_source">UserLoggedDTO.java</span></div><h1>UserLoggedDTO.java</h1><pre class="source lang-java linenums">package com.backend.murasaki.dtos;
+
+import com.backend.murasaki.models.User;
+
+public class UserLoggedDTO {
+
+    private User user;
+
+    private String teacherName;
+
+    private String token;
+
+<span class="fc" id="L13">    public UserLoggedDTO(User user, String teacherName, String token){</span>
+<span class="fc" id="L14">        this.user = user;</span>
+<span class="fc" id="L15">        this.teacherName = teacherName;</span>
+<span class="fc" id="L16">        this.token = token;</span>
+<span class="fc" id="L17">    }</span>
+
+    public User getUser() {
+<span class="fc" id="L20">        return user;</span>
+    }
+
+    public void setUser(User user) {
+<span class="nc" id="L24">        this.user = user;</span>
+<span class="nc" id="L25">    }</span>
+
+    public String getToken() {
+<span class="fc" id="L28">        return token;</span>
+    }
+
+    public void setToken(String token) {
+<span class="nc" id="L32">        this.token = token;</span>
+<span class="nc" id="L33">    }</span>
+
+    public String getTeacherName() {
+<span class="fc" id="L36">        return teacherName;</span>
+    }
+
+    public void setTeacherName(String teacherName) {
+<span class="nc" id="L40">        this.teacherName = teacherName;</span>
+<span class="nc" id="L41">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

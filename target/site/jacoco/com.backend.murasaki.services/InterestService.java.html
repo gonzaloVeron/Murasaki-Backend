@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InterestService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">murasaki</a> &gt; <a href="index.source.html" class="el_package">com.backend.murasaki.services</a> &gt; <span class="el_source">InterestService.java</span></div><h1>InterestService.java</h1><pre class="source lang-java linenums">package com.backend.murasaki.services;
+
+import com.backend.murasaki.dtos.InterestDTO;
+import com.backend.murasaki.exceptions.NotFoundException;
+import com.backend.murasaki.models.Interest;
+import com.backend.murasaki.repositories.InterestRespository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+<span class="fc" id="L17">public class InterestService {</span>
+
+    @Autowired
+    private InterestRespository interestRespository;
+
+    @Transactional
+    public Interest save(InterestDTO dto) {
+<span class="fc" id="L24">        Interest interest = new Interest(dto.getName(), dto.getIcon());</span>
+<span class="fc" id="L25">        return this.interestRespository.save(interest);</span>
+    }
+
+    @Transactional(readOnly = true)
+    public Interest findById(int interest_id) throws NotFoundException {
+<span class="fc" id="L30">        Interest interest = this.interestRespository.findById(interest_id).orElseThrow(() -&gt; new NotFoundException(&quot;The requested interest was not found&quot;));</span>
+<span class="fc" id="L31">        return interest;</span>
+    }
+
+    @Transactional(readOnly = true)
+    public List&lt;Interest&gt; findAll() {
+<span class="fc" id="L36">        return this.interestRespository.findAll();</span>
+    }
+
+    @Transactional(readOnly = true)
+    public Page&lt;Interest&gt; find(String search_text, int page, int size){
+<span class="fc" id="L41">        Pageable p = PageRequest.of(page, size);</span>
+<span class="fc" id="L42">        return this.interestRespository.findByNameLike(p, &quot;%&quot;+search_text+&quot;%&quot;);</span>
+    }
+
+    @Transactional
+    public void delete(int interest_id){
+<span class="pc" id="L47">        Interest interestFound = this.interestRespository.findById(interest_id).orElseThrow(() -&gt; new NotFoundException(&quot;The requested interest was not found&quot;));</span>
+<span class="fc" id="L48">        this.interestRespository.delete(interestFound);</span>
+<span class="fc" id="L49">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TeacherService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">murasaki</a> &gt; <a href="index.source.html" class="el_package">com.backend.murasaki.services</a> &gt; <span class="el_source">TeacherService.java</span></div><h1>TeacherService.java</h1><pre class="source lang-java linenums">package com.backend.murasaki.services;
+
+import com.backend.murasaki.dtos.TeacherDTO;
+import com.backend.murasaki.exceptions.NotFoundException;
+import com.backend.murasaki.models.Student;
+import com.backend.murasaki.models.Teacher;
+import com.backend.murasaki.repositories.TeacherRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+<span class="fc" id="L19">public class TeacherService {</span>
+
+    @Autowired
+    private TeacherRepository teacherRepository;
+
+    @Transactional
+    public Teacher save(TeacherDTO dto) {
+<span class="fc" id="L26">        Teacher teacher = new Teacher(dto.getName());</span>
+<span class="fc" id="L27">        return this.teacherRepository.save(teacher);</span>
+    }
+
+    @Transactional(readOnly = true)
+    public List&lt;Teacher&gt; findAll() {
+<span class="fc" id="L32">        return this.teacherRepository.findAll();</span>
+    }
+
+    @Transactional(readOnly = true)
+    public Teacher findByName(String teacherName) {
+<span class="nc" id="L37">        return this.teacherRepository.findByName(teacherName).orElseThrow(() -&gt; new NotFoundException(&quot;The requested teacher was not found.&quot;));</span>
+    }
+
+    @Transactional(readOnly = true)
+    public Teacher findById(int teacher_id) {
+<span class="fc" id="L42">        return this.teacherRepository.findById(teacher_id).orElseThrow(() -&gt; new NotFoundException(&quot;The requested teacher was not found.&quot;));</span>
+    }
+
+    @Transactional(readOnly = true)
+    public Page&lt;Teacher&gt; find(String search_text, int page, int size){
+<span class="fc" id="L47">        Pageable p = PageRequest.of(page, size);</span>
+<span class="fc" id="L48">        return this.teacherRepository.findByNameLike(p, &quot;%&quot;+search_text+&quot;%&quot;);</span>
+    }
+
+    @Transactional
+    public void delete(int teacher_id){
+<span class="fc" id="L53">        Teacher teacher = this.findById(teacher_id);</span>
+<span class="fc" id="L54">        this.teacherRepository.delete(teacher);</span>
+<span class="fc" id="L55">    }</span>
+
+    @Transactional
+    public Teacher update(int teacher_id, TeacherDTO dto){
+<span class="fc" id="L59">        Teacher teacher = this.findById(teacher_id);</span>
+<span class="fc" id="L60">        teacher.setName(dto.getName());</span>
+<span class="fc" id="L61">        return this.teacherRepository.save(teacher);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

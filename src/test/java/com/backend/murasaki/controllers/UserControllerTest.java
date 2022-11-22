@@ -106,8 +106,8 @@ class UserControllerTest {
         this.mvc.perform(get("/api/v1/user/getByTeacherId/{teacher_id}", 6))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value("gonveron96@gmail.com"))
-                .andExpect(jsonPath("$.name").value("Gonzalo G. Verón"));
+                .andExpect(jsonPath("$.email").value("gonveron96@gmail.com"));
+                //.andExpect(jsonPath("$.name").value("Gonzalo G. Verón"));
     }
 
     @Test

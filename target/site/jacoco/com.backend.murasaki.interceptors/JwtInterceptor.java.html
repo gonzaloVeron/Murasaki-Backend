@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JwtInterceptor.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">murasaki</a> &gt; <a href="index.source.html" class="el_package">com.backend.murasaki.interceptors</a> &gt; <span class="el_source">JwtInterceptor.java</span></div><h1>JwtInterceptor.java</h1><pre class="source lang-java linenums">package com.backend.murasaki.interceptors;
+
+import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.backend.murasaki.services.JwtService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@Component
+<span class="fc" id="L15">public class JwtInterceptor implements HandlerInterceptor {</span>
+
+    @Autowired
+    private JwtService jwtService;
+
+    @Override
+    public boolean preHandle(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            Object handler
+    ) throws Exception {
+<span class="nc" id="L26">        DecodedJWT credentials = null;</span>
+<span class="nc" id="L27">        String jwt = request.getHeader(&quot;Authorization&quot;);</span>
+<span class="nc bnc" id="L28" title="All 2 branches missed.">        if(jwt == null){</span>
+<span class="nc" id="L29">            response.sendError(401, &quot;Token not provided&quot;);</span>
+<span class="nc" id="L30">            return false;</span>
+        }
+        try{
+<span class="nc" id="L33">            credentials = this.jwtService.verify(jwt);</span>
+<span class="nc" id="L34">        }catch (TokenExpiredException e){</span>
+<span class="nc" id="L35">            response.sendError(401, &quot;Provided token is expired&quot;);</span>
+<span class="nc" id="L36">            return false;</span>
+<span class="nc" id="L37">        }</span>
+<span class="nc" id="L38">        request.setAttribute(&quot;user_id&quot;, credentials.getClaim(&quot;sub&quot;).asInt());</span>
+<span class="nc" id="L39">        return HandlerInterceptor.super.preHandle(request, response, handler);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
