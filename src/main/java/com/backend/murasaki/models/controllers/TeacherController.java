@@ -1,4 +1,4 @@
-package com.backend.murasaki.controllers;
+package com.backend.murasaki.models.controllers;
 
 import com.backend.murasaki.dtos.TeacherDTO;
 import com.backend.murasaki.models.Teacher;
