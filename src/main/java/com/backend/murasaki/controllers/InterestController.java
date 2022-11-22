@@ -1,4 +1,4 @@
-package com.backend.murasaki.models.controllers;
+package com.backend.murasaki.controllers;
 
 import com.backend.murasaki.dtos.InterestDTO;
 import com.backend.murasaki.exceptions.NotFoundException;
