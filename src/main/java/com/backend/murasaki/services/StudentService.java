@@ -35,7 +35,7 @@ public class StudentService {
     private UserService userService;
 
     @Autowired
-    private LessonRepository lessonRepository; // plantear mejor solucion para usar el service
+    private LessonRepository lessonRepository;
 
     @Transactional
     public Student save(int user_id, StudentDTO dto) {
