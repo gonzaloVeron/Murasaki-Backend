@@ -4,7 +4,6 @@ com\backend\murasaki\services\SendMailService.class
 com\backend\murasaki\dtos\StudentDTO.class
 com\backend\murasaki\interceptors\JwtInterceptor.class
 com\backend\murasaki\MurasakiApplication.class
-com\backend\murasaki\models\HomeWork.class
 com\backend\murasaki\dtos\UserRegisterDTO.class
 com\backend\murasaki\exceptions\HttpErrorException.class
 com\backend\murasaki\controllers\TeacherController.class
@@ -25,10 +24,12 @@ com\backend\murasaki\repositories\TeacherRepository.class
 com\backend\murasaki\dtos\AddInterestDTO.class
 com\backend\murasaki\services\LinkService.class
 com\backend\murasaki\controllers\UserController.class
+com\backend\murasaki\models\Role.class
 com\backend\murasaki\dtos\UserDTO.class
 com\backend\murasaki\dtos\HomeWorkDTO.class
 com\backend\murasaki\repositories\UserRepository.class
 com\backend\murasaki\exceptions\UnauthorizedException.class
+com\backend\murasaki\repositories\RoleRepository.class
 com\backend\murasaki\dtos\TeacherDTO.class
 com\backend\murasaki\dtos\UserLoggedDTO.class
 com\backend\murasaki\configs\Cors.class
@@ -39,6 +40,7 @@ com\backend\murasaki\repositories\LinkRepository.class
 com\backend\murasaki\controllers\LessonController.class
 com\backend\murasaki\configs\InterceptorConfig.class
 com\backend\murasaki\services\StudentService.class
+com\backend\murasaki\services\RoleService.class
 com\backend\murasaki\models\Interest.class
 com\backend\murasaki\dtos\StudentDTOout.class
 com\backend\murasaki\controllers\InterestController.class

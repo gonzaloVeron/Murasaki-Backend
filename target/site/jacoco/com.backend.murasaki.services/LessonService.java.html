@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LessonService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">murasaki</a> &gt; <a href="index.source.html" class="el_package">com.backend.murasaki.services</a> &gt; <span class="el_source">LessonService.java</span></div><h1>LessonService.java</h1><pre class="source lang-java linenums">package com.backend.murasaki.services;
 
 import com.backend.murasaki.dtos.LessonDTO;
+import com.backend.murasaki.dtos.LinkDTO;
 import com.backend.murasaki.exceptions.NotFoundException;
 import com.backend.murasaki.models.*;
 import com.backend.murasaki.repositories.LessonRepository;
@@ -14,7 +15,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-<span class="fc" id="L17">public class LessonService {</span>
+<span class="fc" id="L18">public class LessonService {</span>
 
     @Autowired
     private LessonRepository lessonRepository;
@@ -27,31 +28,55 @@ import java.util.stream.Collectors;
 
     @Transactional
     public Lesson save(LessonDTO dto) {
-<span class="nc" id="L30">        ArrayList&lt;Link&gt; links = new ArrayList&lt;Link&gt;(dto.getLinkDTOS().stream().map(dTo -&gt; new Link(dTo.getTitle(), dTo.getUrl())).toList());</span>
-<span class="nc" id="L31">        Lesson lesson = new Lesson(dto.getDate(), dto.getLessonNumber(), dto.getContent(), dto.getHomework(), links);</span>
-<span class="nc" id="L32">        return this.lessonRepository.save(lesson);</span>
+<span class="nc" id="L31">        ArrayList&lt;Link&gt; links = new ArrayList&lt;Link&gt;(dto.getLinkDTOS().stream().map(dTo -&gt; new Link(dTo.getTitle(), dTo.getUrl())).toList());</span>
+<span class="nc" id="L32">        Lesson lesson = new Lesson(dto.getDate(), dto.getLessonNumber(), dto.getContent(), dto.getHomework(), links);</span>
+<span class="nc" id="L33">        return this.lessonRepository.save(lesson);</span>
     }
 
     @Transactional(readOnly = true)
     public List&lt;Lesson&gt; findAll(){
-<span class="fc" id="L37">        return this.lessonRepository.findAll();</span>
+<span class="fc" id="L38">        return this.lessonRepository.findAll();</span>
     }
 
     @Transactional(readOnly = true)
     public Lesson findById(int lesson_id) {
-<span class="fc" id="L42">        return this.lessonRepository.findById(lesson_id).orElseThrow(() -&gt; new NotFoundException(&quot;The requested lesson was not found.&quot;));</span>
+<span class="fc" id="L43">        return this.lessonRepository.findById(lesson_id).orElseThrow(() -&gt; new NotFoundException(&quot;The requested lesson was not found.&quot;));</span>
     }
 
     @Transactional
     public Lesson update(int lesson_id, LessonDTO dto){
-<span class="nc" id="L47">        Lesson lessonFound = this.findById(lesson_id);</span>
-<span class="nc" id="L48">        lessonFound.setLessonNumber(dto.getLessonNumber());</span>
-<span class="nc" id="L49">        lessonFound.setContent(dto.getContent());</span>
-<span class="nc" id="L50">        lessonFound.setDate(dto.getDate());</span>
-<span class="nc" id="L51">        lessonFound.setHomework(dto.getHomework());</span>
-<span class="nc" id="L52">        List&lt;Link&gt; links = dto.getLinkDTOS().stream().map(dTo -&gt; new Link(dTo.getTitle(), dTo.getUrl())).toList();</span>
-<span class="nc" id="L53">        lessonFound.setLinks(links);</span>
-<span class="nc" id="L54">        return this.lessonRepository.save(lessonFound);</span>
+<span class="nc" id="L48">        Lesson lessonFound = this.findById(lesson_id);</span>
+<span class="nc" id="L49">        lessonFound.setLessonNumber(dto.getLessonNumber());</span>
+<span class="nc" id="L50">        lessonFound.setContent(dto.getContent());</span>
+<span class="nc" id="L51">        lessonFound.setDate(dto.getDate());</span>
+<span class="nc" id="L52">        lessonFound.setHomework(dto.getHomework());</span>
+
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        List&lt;Link&gt; newLinks = dto.getLinkDTOS().stream().filter(ldto -&gt; ldto.getId() == null).map(ldto -&gt; new Link(ldto.getTitle(), ldto.getUrl())).toList();</span>
+
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        List&lt;Link&gt; toUpdateLinks = dto.getLinkDTOS().stream().filter(ldto -&gt; ldto.getId() != null).map(ldto -&gt; new Link(ldto.getId(), ldto.getTitle(), ldto.getUrl())).toList();</span>
+
+<span class="nc" id="L58">        List&lt;Integer&gt; ids = dto.getLinkDTOS().stream().map(dTo -&gt; dTo.getId()).toList();</span>
+
+<span class="nc" id="L60">        List&lt;Link&gt; linksToRemove = this.filterLinksByIds(lessonFound.getLinks(), ids);</span>
+
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        for(int i = 0; i &lt; linksToRemove.size(); i++){</span>
+<span class="nc" id="L63">            lessonFound.getLinks().remove(linksToRemove.get(i));</span>
+        }
+
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        for(int i = 0; i &lt; toUpdateLinks.size(); i++){</span>
+<span class="nc" id="L67">            Link actual = toUpdateLinks.get(i);</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">            Link found = lessonFound.getLinks().stream().filter(link -&gt; link.getId() == actual.getId()).findFirst().orElseThrow(() -&gt; new NotFoundException(&quot;The link requested was not found.&quot;));</span>
+<span class="nc" id="L69">            found.setTitle(actual.getTitle());</span>
+<span class="nc" id="L70">            found.setUrl(actual.getUrl());</span>
+        }
+
+<span class="nc" id="L73">        lessonFound.getLinks().addAll(newLinks);</span>
+
+<span class="nc" id="L75">        return this.lessonRepository.save(lessonFound);</span>
+    }
+
+    private List&lt;Link&gt; filterLinksByIds(List&lt;Link&gt; links, List&lt;Integer&gt; ids){
+<span class="nc bnc" id="L79" title="All 4 branches missed.">        return links.stream().filter(link -&gt; !ids.stream().anyMatch(n -&gt; n == link.getId())).toList();</span>
     }
 
 }

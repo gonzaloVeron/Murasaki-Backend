@@ -1,7 +1,6 @@
 com\backend\murasaki\controllers\UserControllerTest.class
 com\backend\murasaki\controllers\LessonControllerTest.class
 com\backend\murasaki\controllers\StudentControllerTest$1.class
-com\backend\murasaki\MurasakiApplicationTests.class
 com\backend\murasaki\controllers\UserControllerTest$2.class
 com\backend\murasaki\controllers\InterestControllerTest$1.class
 com\backend\murasaki\controllers\StudentControllerTest$2.class

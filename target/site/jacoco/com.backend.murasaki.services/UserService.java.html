@@ -3,6 +3,7 @@
 import com.backend.murasaki.dtos.*;
 import com.backend.murasaki.exceptions.NotFoundException;
 import com.backend.murasaki.exceptions.UnauthorizedException;
+import com.backend.murasaki.models.Role;
 import com.backend.murasaki.models.Teacher;
 import com.backend.murasaki.models.User;
 import com.backend.murasaki.repositories.UserRepository;
@@ -22,7 +23,7 @@ import java.util.stream.Stream;
 import java.util.Random;
 
 @Service
-<span class="fc" id="L25">public class UserService {</span>
+<span class="fc" id="L26">public class UserService {</span>
 
     @Autowired
     private UserRepository userRepository;
@@ -39,87 +40,91 @@ import java.util.Random;
     @Autowired
     private Environment env;
 
+    @Autowired
+    private RoleService roleService;
+
     @Transactional
     public User register(UserRegisterDTO dto){
-<span class="fc" id="L44">        TeacherDTO teacherDTO = new TeacherDTO(dto.getName());</span>
-<span class="fc" id="L45">        Teacher teacherFound = this.teacherService.save(teacherDTO);</span>
-<span class="fc" id="L46">        String randomPass = this.generateSecureRandomPassword();</span>
-<span class="fc" id="L47">        User user = this.userRepository.save(new User(dto.getEmail(), this.hashPassword(randomPass), teacherFound));</span>
-<span class="fc" id="L48">        this.sendMailService.sendMail(</span>
-<span class="fc" id="L49">          &quot;gonveron96@gmail.com&quot;, dto.getEmail(), &quot;Murasaki&quot;, &quot;Su password es: &quot; + randomPass</span>
+<span class="fc" id="L48">        TeacherDTO teacherDTO = new TeacherDTO(dto.getName());</span>
+<span class="fc" id="L49">        Teacher teacherFound = this.teacherService.save(teacherDTO);</span>
+<span class="fc" id="L50">        String randomPass = this.generateSecureRandomPassword();</span>
+<span class="fc" id="L51">        Role teacherRole = this.roleService.getRole(&quot;teacher&quot;);</span>
+<span class="fc" id="L52">        User user = this.userRepository.save(new User(dto.getEmail(), this.hashPassword(randomPass), teacherFound, teacherRole));</span>
+<span class="fc" id="L53">        this.sendMailService.sendMail(</span>
+<span class="fc" id="L54">          &quot;gonveron96@gmail.com&quot;, dto.getEmail(), &quot;Murasaki&quot;, &quot;Su password es: &quot; + randomPass</span>
         );
-<span class="fc" id="L51">        return user;</span>
+<span class="fc" id="L56">        return user;</span>
     }
 
     @Transactional(readOnly = true)
     public User findById(int user_id){
-<span class="pc" id="L56">        return this.userRepository.findById(user_id).orElseThrow(() -&gt; new NotFoundException(&quot;The user requested was now found&quot;));</span>
+<span class="pc" id="L61">        return this.userRepository.findById(user_id).orElseThrow(() -&gt; new NotFoundException(&quot;The user requested was now found&quot;));</span>
     }
 
     @Transactional(readOnly = true)
     public UserLoggedDTO authenticate(UserCredentialsDTO dto){
-<span class="pc" id="L61">        User userFound = this.userRepository.findByEmail(dto.getEmail()).orElseThrow(() -&gt; new UnauthorizedException(&quot;Credenciales inválidas&quot;));</span>
-<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        if(!this.matchPassword(dto.getPassword(), userFound.getPassword())){</span>
-<span class="nc" id="L63">            throw new UnauthorizedException(&quot;Credenciales inválidas&quot;);</span>
+<span class="pc" id="L66">        User userFound = this.userRepository.findByEmail(dto.getEmail()).orElseThrow(() -&gt; new UnauthorizedException(&quot;Credenciales inválidas&quot;));</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if(!this.matchPassword(dto.getPassword(), userFound.getPassword())){</span>
+<span class="nc" id="L68">            throw new UnauthorizedException(&quot;Credenciales inválidas&quot;);</span>
         }
-<span class="fc" id="L65">        return new UserLoggedDTO(userFound, userFound.getTeacher().getName(), this.jwtService.create(userFound.getId()));</span>
+<span class="fc" id="L70">        return new UserLoggedDTO(userFound, userFound.getTeacher().getName(), this.jwtService.create(userFound.getId(), userFound.getRole().getName()));</span>
     }
 
     @Transactional(readOnly = true)
     public UserDTO findByTeacherId(int id){
-<span class="pc" id="L70">        User user = this.userRepository.findByTeacher_id(id).orElseThrow(() -&gt; new NotFoundException(&quot;The requested user was not found.&quot;));</span>
-<span class="fc" id="L71">        return new UserDTO(user.getEmail(), user.getTeacher().getName());</span>
+<span class="pc" id="L75">        User user = this.userRepository.findByTeacher_id(id).orElseThrow(() -&gt; new NotFoundException(&quot;The requested user was not found.&quot;));</span>
+<span class="fc" id="L76">        return new UserDTO(user.getEmail(), user.getTeacher().getName());</span>
     }
 
     @Transactional(readOnly = true)
     public void sendRecoveryEmail(String email){
-<span class="nc" id="L76">        User userFound = this.userRepository.findByEmail(email).orElseThrow(() -&gt; new NotFoundException(&quot;The requested user was not found.&quot;));</span>
-<span class="nc" id="L77">        String token = this.jwtService.create(userFound.getId());</span>
-<span class="nc" id="L78">        this.sendMailService.sendMail(</span>
+<span class="nc" id="L81">        User userFound = this.userRepository.findByEmail(email).orElseThrow(() -&gt; new NotFoundException(&quot;The requested user was not found.&quot;));</span>
+<span class="nc" id="L82">        String token = this.jwtService.create(userFound.getId(), userFound.getRole().getName());</span>
+<span class="nc" id="L83">        this.sendMailService.sendMail(</span>
                 &quot;gonveron96@gmail.com&quot;,
                 email,
                 &quot;Murasaki - Recuperar contraseña&quot;,
                 &quot;Por favor, entre en el siguiente enlace para cambiar su contraseña &quot; + &quot;http://localhost:4200/auth/changePassword/&quot; + token
         );
-<span class="nc" id="L84">    }</span>
+<span class="nc" id="L89">    }</span>
 
     @Transactional
     public void changeUserPassword(int id, String password){
-<span class="nc" id="L88">        User userFound = this.userRepository.findById(id).orElseThrow(() -&gt; new NotFoundException(&quot;The requested user was not found.&quot;));</span>
-<span class="nc" id="L89">        userFound.setPassword(this.hashPassword(password));</span>
-<span class="nc" id="L90">        this.userRepository.save(userFound);</span>
-<span class="nc" id="L91">    }</span>
+<span class="nc" id="L93">        User userFound = this.userRepository.findById(id).orElseThrow(() -&gt; new NotFoundException(&quot;The requested user was not found.&quot;));</span>
+<span class="nc" id="L94">        userFound.setPassword(this.hashPassword(password));</span>
+<span class="nc" id="L95">        this.userRepository.save(userFound);</span>
+<span class="nc" id="L96">    }</span>
 
     private String hashPassword(String password){
-<span class="fc" id="L94">        int strength = Integer.parseInt(env.getProperty(&quot;passHashSecret&quot;));</span>
-<span class="fc" id="L95">        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(strength, new SecureRandom());</span>
-<span class="fc" id="L96">        return  bCryptPasswordEncoder.encode(password);</span>
+<span class="fc" id="L99">        int strength = Integer.parseInt(env.getProperty(&quot;passHashSecret&quot;));</span>
+<span class="fc" id="L100">        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(strength, new SecureRandom());</span>
+<span class="fc" id="L101">        return  bCryptPasswordEncoder.encode(password);</span>
     }
 
     private boolean matchPassword(String rawPassword, String encodedPassword){
-<span class="fc" id="L100">        int strength = Integer.parseInt(env.getProperty(&quot;passHashSecret&quot;));</span>
-<span class="fc" id="L101">        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(strength, new SecureRandom());</span>
-<span class="fc" id="L102">        return bCryptPasswordEncoder.matches(rawPassword, encodedPassword);</span>
+<span class="fc" id="L105">        int strength = Integer.parseInt(env.getProperty(&quot;passHashSecret&quot;));</span>
+<span class="fc" id="L106">        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(strength, new SecureRandom());</span>
+<span class="fc" id="L107">        return bCryptPasswordEncoder.matches(rawPassword, encodedPassword);</span>
     }
 
     /* ----------- */
 
     private Stream&lt;Character&gt; getRandomSpecialChars(int count) {
-<span class="fc" id="L108">        Random random = new SecureRandom();</span>
-<span class="fc" id="L109">        IntStream specialChars = random.ints(count, 33, 45);</span>
-<span class="fc" id="L110">        return specialChars.mapToObj(data -&gt; (char) data);</span>
+<span class="fc" id="L113">        Random random = new SecureRandom();</span>
+<span class="fc" id="L114">        IntStream specialChars = random.ints(count, 33, 45);</span>
+<span class="fc" id="L115">        return specialChars.mapToObj(data -&gt; (char) data);</span>
     }
 
     private String generateSecureRandomPassword() {
-<span class="fc" id="L114">        Stream&lt;Character&gt; pwdStream = Stream.concat(getRandomSpecialChars(2),</span>
-<span class="fc" id="L115">                Stream.concat(getRandomSpecialChars(2),</span>
-<span class="fc" id="L116">                        Stream.concat(getRandomSpecialChars(2), getRandomSpecialChars(4))));</span>
-<span class="fc" id="L117">        List&lt;Character&gt; charList = pwdStream.collect(Collectors.toList());</span>
-<span class="fc" id="L118">        Collections.shuffle(charList);</span>
-<span class="fc" id="L119">        String password = charList.stream()</span>
-<span class="fc" id="L120">                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)</span>
-<span class="fc" id="L121">                .toString();</span>
-<span class="fc" id="L122">        return password;</span>
+<span class="fc" id="L119">        Stream&lt;Character&gt; pwdStream = Stream.concat(getRandomSpecialChars(2),</span>
+<span class="fc" id="L120">                Stream.concat(getRandomSpecialChars(2),</span>
+<span class="fc" id="L121">                        Stream.concat(getRandomSpecialChars(2), getRandomSpecialChars(4))));</span>
+<span class="fc" id="L122">        List&lt;Character&gt; charList = pwdStream.collect(Collectors.toList());</span>
+<span class="fc" id="L123">        Collections.shuffle(charList);</span>
+<span class="fc" id="L124">        String password = charList.stream()</span>
+<span class="fc" id="L125">                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)</span>
+<span class="fc" id="L126">                .toString();</span>
+<span class="fc" id="L127">        return password;</span>
     }
 
 }

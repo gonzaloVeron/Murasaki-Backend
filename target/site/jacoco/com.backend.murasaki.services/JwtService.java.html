@@ -15,11 +15,11 @@ import java.util.Date;
 
     @Autowired Environment env;
 
-    public String create(int user_id){
+    public String create(int user_id, String roleName){
 <span class="fc" id="L19">        Date expireDate = new Date();</span>
 <span class="fc" id="L20">        long exp = (expireDate.getTime() + 210 * 24 * 3600) / 1000;</span>
 <span class="fc" id="L21">        Algorithm algorithm = Algorithm.HMAC256(env.getProperty(&quot;jwtSecret&quot;));</span>
-<span class="fc" id="L22">        return JWT.create().withClaim(&quot;exp&quot;, exp).withClaim(&quot;sub&quot;, user_id).withIssuer(env.getProperty(&quot;jwtIssuer&quot;)).sign(algorithm);</span>
+<span class="fc" id="L22">        return JWT.create().withClaim(&quot;exp&quot;, exp).withClaim(&quot;sub&quot;, user_id).withClaim(&quot;role&quot;, roleName).withIssuer(env.getProperty(&quot;jwtIssuer&quot;)).sign(algorithm);</span>
     }
 
     public DecodedJWT verify(String token){
@@ -27,5 +27,6 @@ import java.util.Date;
 <span class="nc" id="L27">        JWTVerifier verifier = JWT.require(algorithm).withIssuer(env.getProperty(&quot;jwtIssuer&quot;)).build();</span>
 <span class="nc" id="L28">        return verifier.verify(token);</span>
     }
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
