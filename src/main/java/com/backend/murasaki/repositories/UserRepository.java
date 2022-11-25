@@ -12,10 +12,10 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends PagingAndSortingRepository<User, Integer> {
-    @EntityGraph(attributePaths = {"teacher"})
+    @EntityGraph(attributePaths = {"teacher", "role"})
     Optional<User> findById(Integer id);
 
-    @EntityGraph(attributePaths = {"teacher"})
+    @EntityGraph(attributePaths = {"teacher", "role"})
     Optional<User> findByEmail(String email);
 
     @EntityGraph(attributePaths = {"teacher"})

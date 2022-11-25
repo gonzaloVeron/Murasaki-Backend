@@ -34,6 +34,7 @@ public class StudentController {
     @PostMapping(path = "/jwt")
     @ResponseBody
     public Student create(HttpServletRequest request, @RequestBody StudentDTO dto) {
+//        String user_role = (String)request.getAttribute("user_role");
         int user_id = (int)request.getAttribute("user_id");
         return this.studentService.save(user_id, dto);
     }
@@ -65,15 +66,17 @@ public class StudentController {
     @GetMapping(path = "/jwt/find/{search_text}")
     @ResponseBody
     public Page<StudentDTOout> find(HttpServletRequest request, @PathVariable String search_text, @RequestParam int page, @RequestParam int size){
+        String user_role = (String)request.getAttribute("user_role");
         int user_id = (int)request.getAttribute("user_id");
-        return this.studentService.find(user_id, search_text, page, size);
+        return this.studentService.find(user_id, user_role, search_text, page, size);
     }
 
     @GetMapping(path = "/jwt/find")
     @ResponseBody
     public Page<StudentDTOout> findAll(HttpServletRequest request, @RequestParam int page, @RequestParam int size){
+        String user_role = (String)request.getAttribute("user_role");
         int user_id = (int)request.getAttribute("user_id");
-        return this.studentService.find(user_id, "", page, size);
+        return this.studentService.find(user_id, user_role, "", page, size);
     }
 
     @DeleteMapping(path = "/jwt/{student_id}")

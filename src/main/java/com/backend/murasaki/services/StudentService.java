@@ -40,9 +40,15 @@ public class StudentService {
     @Transactional
     public Student save(int user_id, StudentDTO dto) {
         User user = this.userService.findById(user_id);
-        Teacher teacher = this.teacherService.findById(user.getTeacher().getId());
+        String userRole = user.getRole().getName();
+        Teacher teacher;
         List<Integer> interestIds = dto.getInterests().stream().map(Interest::getId).toList();
         Set<Interest> interests = this.interestService.findAll().stream().filter(interest -> interestIds.stream().anyMatch(i -> i == interest.getId())).collect(Collectors.toSet());
+        if(Objects.equals(userRole, "administrator")){
+            teacher = this.teacherService.findById(dto.getTeacherAsignedId());
+        }else{
+            teacher = this.teacherService.findById(user.getTeacher().getId());
+        }
         Student student = new Student(dto.getName(), dto.getJlptLevel(), teacher, dto.getPriorKnowledge(), dto.getAge(), dto.getTel(), dto.getEmail(), dto.getEmailTutor(), interests, new ArrayList<>());
         this.studentRepository.save(student);
         return student;
@@ -105,15 +111,23 @@ public class StudentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<StudentDTOout> find(int user_id, String search_text, int page, int size){
-        //Pageable page = PageRequest.of(1, 2, Sort.by("name"));
-        Pageable p = PageRequest.of(page, size);
+    public Page<StudentDTOout> find(int user_id, String user_role, String search_text, int page, int size){
+        Pageable p = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "name"));
+//        Pageable p = PageRequest.of(page, size);
         Page<Student> students;
-        User user = this.userService.findById(user_id);
-        if(this.isInteger(search_text)){
-            students = this.studentRepository.findByJlptLevelAndTeacherAssigned(p, Integer.parseInt(search_text), user.getTeacher());
+        if(Objects.equals(user_role, "administrator")){
+            if(this.isInteger(search_text)){
+                students = this.studentRepository.findByJlptLevel(p, Integer.parseInt(search_text));
+            }else{
+                students = this.studentRepository.findByNameLike(p,"%"+search_text+"%");
+            }
         }else{
-            students = this.studentRepository.findByNameLikeAndTeacherAssigned(p,"%"+search_text+"%", user.getTeacher());
+            User user = this.userService.findById(user_id);
+            if(this.isInteger(search_text)){
+                students = this.studentRepository.findByJlptLevelAndTeacherAssigned(p, Integer.parseInt(search_text), user.getTeacher());
+            }else{
+                students = this.studentRepository.findByNameLikeAndTeacherAssigned(p,"%"+search_text+"%", user.getTeacher());
+            }
         }
         return students.map(student -> new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getEmail(), student.getTel(), student.getTeacherAssigned().toDTO()));
     }

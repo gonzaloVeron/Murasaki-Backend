@@ -15,11 +15,11 @@ public class JwtService {
 
     @Autowired Environment env;
 
-    public String create(int user_id){
+    public String create(int user_id, String roleName){
         Date expireDate = new Date();
         long exp = (expireDate.getTime() + 210 * 24 * 3600) / 1000;
         Algorithm algorithm = Algorithm.HMAC256(env.getProperty("jwtSecret"));
-        return JWT.create().withClaim("exp", exp).withClaim("sub", user_id).withIssuer(env.getProperty("jwtIssuer")).sign(algorithm);
+        return JWT.create().withClaim("exp", exp).withClaim("sub", user_id).withClaim("role", roleName).withIssuer(env.getProperty("jwtIssuer")).sign(algorithm);
     }
 
     public DecodedJWT verify(String token){
@@ -27,4 +27,5 @@ public class JwtService {
         JWTVerifier verifier = JWT.require(algorithm).withIssuer(env.getProperty("jwtIssuer")).build();
         return verifier.verify(token);
     }
+
 }

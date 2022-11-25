@@ -53,11 +53,8 @@ class UserControllerTest {
     @Test
     void loginTest() throws Exception {
         Object obj = new Object() {
-
             public String email = "gonveron96@gmail.com";
-//asd
             public String password = "aaaa";
-
         };
 
         ObjectMapper mapper = new ObjectMapper();

@@ -24,6 +24,10 @@ public class User {
     @JsonIgnore
     private Teacher teacher;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
+
     public User(){ }
 
     public User(int id, String email, String password, Teacher teacher){
@@ -69,6 +73,14 @@ public class User {
 
     public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
 }

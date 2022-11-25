@@ -3,6 +3,7 @@ package com.backend.murasaki.services;
 import com.backend.murasaki.dtos.*;
 import com.backend.murasaki.exceptions.NotFoundException;
 import com.backend.murasaki.exceptions.UnauthorizedException;
+import com.backend.murasaki.models.Role;
 import com.backend.murasaki.models.Teacher;
 import com.backend.murasaki.models.User;
 import com.backend.murasaki.repositories.UserRepository;
@@ -39,6 +40,9 @@ public class UserService {
     @Autowired
     private Environment env;
 
+    @Autowired
+    private RoleService roleService;
+
     @Transactional
     public User register(UserRegisterDTO dto){
         TeacherDTO teacherDTO = new TeacherDTO(dto.getName());
@@ -62,7 +66,7 @@ public class UserService {
         if(!this.matchPassword(dto.getPassword(), userFound.getPassword())){
             throw new UnauthorizedException("Credenciales inválidas");
         }
-        return new UserLoggedDTO(userFound, userFound.getTeacher().getName(), this.jwtService.create(userFound.getId()));
+        return new UserLoggedDTO(userFound, userFound.getTeacher().getName(), this.jwtService.create(userFound.getId(), userFound.getRole().getName()));
     }
 
     @Transactional(readOnly = true)
@@ -74,7 +78,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public void sendRecoveryEmail(String email){
         User userFound = this.userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("The requested user was not found."));
-        String token = this.jwtService.create(userFound.getId());
+        String token = this.jwtService.create(userFound.getId(), userFound.getRole().getName());
         this.sendMailService.sendMail(
                 "gonveron96@gmail.com",
                 email,

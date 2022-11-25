@@ -35,6 +35,7 @@ public class JwtInterceptor implements HandlerInterceptor {
             response.sendError(401, "Provided token is expired");
             return false;
         }
+        request.setAttribute("user_role", credentials.getClaim("role").asString());
         request.setAttribute("user_id", credentials.getClaim("sub").asInt());
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }
