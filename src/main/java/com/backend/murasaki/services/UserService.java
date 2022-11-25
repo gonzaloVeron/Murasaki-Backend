@@ -48,7 +48,8 @@ public class UserService {
         TeacherDTO teacherDTO = new TeacherDTO(dto.getName());
         Teacher teacherFound = this.teacherService.save(teacherDTO);
         String randomPass = this.generateSecureRandomPassword();
-        User user = this.userRepository.save(new User(dto.getEmail(), this.hashPassword(randomPass), teacherFound));
+        Role teacherRole = this.roleService.getRole("teacher");
+        User user = this.userRepository.save(new User(dto.getEmail(), this.hashPassword(randomPass), teacherFound, teacherRole));
         this.sendMailService.sendMail(
           "gonveron96@gmail.com", dto.getEmail(), "Murasaki", "Su password es: " + randomPass
         );

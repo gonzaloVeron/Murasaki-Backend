@@ -30,17 +30,19 @@ public class User {
 
     public User(){ }
 
-    public User(int id, String email, String password, Teacher teacher){
+    public User(int id, String email, String password, Teacher teacher, Role role){
         this.id = id;
         this.email = email;
         this.password = password;
         this.teacher = teacher;
+        this.role = role;
     }
 
-    public User(String email, String password, Teacher teacher){
+    public User(String email, String password, Teacher teacher, Role role){
         this.email = email;
         this.password = password;
         this.teacher = teacher;
+        this.role = role;
     }
 
     public int getId() {
