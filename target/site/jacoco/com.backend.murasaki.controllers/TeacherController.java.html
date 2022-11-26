@@ -61,11 +61,12 @@ import java.util.List;
 <span class="fc" id="L61">        return this.teacherService.update(teacher_id, dto);</span>
     }
 
-//    @PostMapping(path = &quot;/jwt/{source_teacher_id}/{target_teacher_id}&quot;)
-//    @ResponseBody
-//    public Teacher translateStudents(@PathVariable int source_teacher_id, @PathVariable int target_teacher_id, @RequestBody TranslateStudentDTO dto){
-//        return this.teacherService.translateStudents(source_teacher_id, target_teacher_id, dto);
-//    }
+    @GetMapping(path = &quot;/actual&quot;)
+    @ResponseBody
+    public Teacher actualTeacher(HttpServletRequest request){
+<span class="fc" id="L67">        int user_id = (int)request.getAttribute(&quot;user_id&quot;);</span>
+<span class="fc" id="L68">        return this.teacherService.getActualTeacher(user_id);</span>
+    }
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

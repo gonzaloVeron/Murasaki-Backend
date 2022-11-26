@@ -21,7 +21,7 @@ murasaki,com.backend.murasaki.services,StudentService,179,299,13,5,29,47,19,14,1
 murasaki,com.backend.murasaki.services,LinkService,31,3,0,0,3,1,3,1,3,1
 murasaki,com.backend.murasaki.services,LessonService,55,188,4,10,4,21,7,17,3,14
 murasaki,com.backend.murasaki.services,UserService,76,197,1,1,9,33,8,10,7,10
-murasaki,com.backend.murasaki.services,TeacherService,18,100,0,0,1,17,3,8,3,8
+murasaki,com.backend.murasaki.services,TeacherService,23,112,0,0,1,19,4,9,4,9
 murasaki,com.backend.murasaki.exceptions,HttpErrorException,10,0,0,0,4,0,2,0,2,0
 murasaki,com.backend.murasaki.exceptions,NotFoundException,0,4,0,0,0,2,0,1,0,1
 murasaki,com.backend.murasaki.exceptions,UnauthorizedException,4,0,0,0,2,0,1,0,1,0
@@ -34,7 +34,7 @@ murasaki,com.backend.murasaki.models,Lesson,29,55,0,0,12,23,3,12,3,12
 murasaki,com.backend.murasaki.models,User,38,33,0,0,17,12,6,7,6,7
 murasaki,com.backend.murasaki.interceptors,JwtInterceptor,50,0,2,0,14,0,3,0,2,0
 murasaki,com.backend.murasaki.controllers,LessonController,0,18,0,0,0,4,0,4,0,4
-murasaki,com.backend.murasaki.controllers,TeacherController,0,58,0,0,0,11,0,8,0,8
+murasaki,com.backend.murasaki.controllers,TeacherController,0,69,0,0,0,13,0,9,0,9
 murasaki,com.backend.murasaki.controllers,StudentController,13,111,0,0,4,16,2,10,2,10
 murasaki,com.backend.murasaki.controllers,UserController,17,18,0,0,5,4,2,4,2,4
 murasaki,com.backend.murasaki.controllers,InterestController,0,36,0,0,0,8,0,7,0,7

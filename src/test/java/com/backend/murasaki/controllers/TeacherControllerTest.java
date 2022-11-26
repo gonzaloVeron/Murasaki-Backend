@@ -151,4 +151,14 @@ class TeacherControllerTest {
                 .andReturn();
     }
 
+    @Test
+    void actualTeacherTest() throws Exception {
+        MvcResult result = this.mvc.perform(get("/api/v1/teacher/jwt/actual").requestAttr("user_id", 9))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", 4).exists())
+                .andExpect(jsonPath("$.name", "Julian Borja").exists())
+                .andReturn();
+    }
+
 }

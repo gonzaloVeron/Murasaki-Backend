@@ -30,6 +30,12 @@ public class TeacherService {
     @Autowired
     private UserRepository userRepository;
 
+    @Transactional(readOnly = true)
+    public Teacher getActualTeacher(int user_id){
+        User user = this.userRepository.findById(user_id).orElseThrow(() -> new NotFoundException("The requested user was not found"));
+        return user.getTeacher();
+    }
+
     @Transactional
     public Teacher save(TeacherDTO dto) {
         Teacher teacher = new Teacher(dto.getName());

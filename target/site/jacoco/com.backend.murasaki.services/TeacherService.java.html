@@ -30,48 +30,54 @@ import java.util.List;
     @Autowired
     private UserRepository userRepository;
 
+    @Transactional(readOnly = true)
+    public Teacher getActualTeacher(int user_id){
+<span class="pc" id="L35">        User user = this.userRepository.findById(user_id).orElseThrow(() -&gt; new NotFoundException(&quot;The requested user was not found&quot;));</span>
+<span class="fc" id="L36">        return user.getTeacher();</span>
+    }
+
     @Transactional
     public Teacher save(TeacherDTO dto) {
-<span class="fc" id="L35">        Teacher teacher = new Teacher(dto.getName());</span>
-<span class="fc" id="L36">        return this.teacherRepository.save(teacher);</span>
+<span class="fc" id="L41">        Teacher teacher = new Teacher(dto.getName());</span>
+<span class="fc" id="L42">        return this.teacherRepository.save(teacher);</span>
     }
 
     @Transactional(readOnly = true)
     public List&lt;Teacher&gt; findAll() {
-<span class="fc" id="L41">        return this.teacherRepository.findAll();</span>
+<span class="fc" id="L47">        return this.teacherRepository.findAll();</span>
     }
 
     @Transactional(readOnly = true)
     public Teacher findByName(String teacherName) {
-<span class="nc" id="L46">        return this.teacherRepository.findByName(teacherName).orElseThrow(() -&gt; new NotFoundException(&quot;The requested teacher was not found.&quot;));</span>
+<span class="nc" id="L52">        return this.teacherRepository.findByName(teacherName).orElseThrow(() -&gt; new NotFoundException(&quot;The requested teacher was not found.&quot;));</span>
     }
 
     @Transactional(readOnly = true)
     public Teacher findById(int teacher_id) {
-<span class="fc" id="L51">        return this.teacherRepository.findById(teacher_id).orElseThrow(() -&gt; new NotFoundException(&quot;The requested teacher was not found.&quot;));</span>
+<span class="fc" id="L57">        return this.teacherRepository.findById(teacher_id).orElseThrow(() -&gt; new NotFoundException(&quot;The requested teacher was not found.&quot;));</span>
     }
 
     @Transactional(readOnly = true)
     public Page&lt;Teacher&gt; find(Integer user_id, String search_text, int page, int size){
-<span class="pc" id="L56">        User user = this.userRepository.findById(user_id).orElseThrow(() -&gt; new NotFoundException(&quot;The requested user was not found&quot;));</span>
-<span class="fc" id="L57">        Pageable p = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, &quot;name&quot;));</span>
-<span class="fc" id="L58">        List&lt;Integer&gt; idsToFilter = new ArrayList&lt;Integer&gt;();</span>
-<span class="fc" id="L59">        idsToFilter.add(0);</span>
-<span class="fc" id="L60">        idsToFilter.add(user.getTeacher().getId());</span>
-<span class="fc" id="L61">        return this.teacherRepository.findByNameLikeAndIdNotIn(p, &quot;%&quot;+search_text+&quot;%&quot;, idsToFilter);</span>
+<span class="pc" id="L62">        User user = this.userRepository.findById(user_id).orElseThrow(() -&gt; new NotFoundException(&quot;The requested user was not found&quot;));</span>
+<span class="fc" id="L63">        Pageable p = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, &quot;name&quot;));</span>
+<span class="fc" id="L64">        List&lt;Integer&gt; idsToFilter = new ArrayList&lt;Integer&gt;();</span>
+<span class="fc" id="L65">        idsToFilter.add(0);</span>
+<span class="fc" id="L66">        idsToFilter.add(user.getTeacher().getId());</span>
+<span class="fc" id="L67">        return this.teacherRepository.findByNameLikeAndIdNotIn(p, &quot;%&quot;+search_text+&quot;%&quot;, idsToFilter);</span>
     }
 
     @Transactional
     public void delete(int teacher_id){
-<span class="fc" id="L66">        Teacher teacher = this.findById(teacher_id);</span>
-<span class="fc" id="L67">        this.teacherRepository.delete(teacher);</span>
-<span class="fc" id="L68">    }</span>
+<span class="fc" id="L72">        Teacher teacher = this.findById(teacher_id);</span>
+<span class="fc" id="L73">        this.teacherRepository.delete(teacher);</span>
+<span class="fc" id="L74">    }</span>
 
     @Transactional
     public Teacher update(int teacher_id, TeacherDTO dto){
-<span class="fc" id="L72">        Teacher teacher = this.findById(teacher_id);</span>
-<span class="fc" id="L73">        teacher.setName(dto.getName());</span>
-<span class="fc" id="L74">        return this.teacherRepository.save(teacher);</span>
+<span class="fc" id="L78">        Teacher teacher = this.findById(teacher_id);</span>
+<span class="fc" id="L79">        teacher.setName(dto.getName());</span>
+<span class="fc" id="L80">        return this.teacherRepository.save(teacher);</span>
     }
 
 }

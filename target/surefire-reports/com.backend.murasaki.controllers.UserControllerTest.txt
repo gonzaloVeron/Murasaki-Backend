@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.backend.murasaki.controllers.UserControllerTest
 -------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.554 s - in com.backend.murasaki.controllers.UserControllerTest
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.857 s - in com.backend.murasaki.controllers.UserControllerTest

@@ -61,10 +61,11 @@ public class TeacherController {
         return this.teacherService.update(teacher_id, dto);
     }
 
-//    @PostMapping(path = "/jwt/{source_teacher_id}/{target_teacher_id}")
-//    @ResponseBody
-//    public Teacher translateStudents(@PathVariable int source_teacher_id, @PathVariable int target_teacher_id, @RequestBody TranslateStudentDTO dto){
-//        return this.teacherService.translateStudents(source_teacher_id, target_teacher_id, dto);
-//    }
+    @GetMapping(path = "/actual")
+    @ResponseBody
+    public Teacher actualTeacher(HttpServletRequest request){
+        int user_id = (int)request.getAttribute("user_id");
+        return this.teacherService.getActualTeacher(user_id);
+    }
 
 }
