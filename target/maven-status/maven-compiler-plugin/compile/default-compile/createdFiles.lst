@@ -24,6 +24,7 @@ com\backend\murasaki\repositories\TeacherRepository.class
 com\backend\murasaki\dtos\AddInterestDTO.class
 com\backend\murasaki\services\LinkService.class
 com\backend\murasaki\controllers\UserController.class
+com\backend\murasaki\dtos\TranslateStudentDTO.class
 com\backend\murasaki\models\Role.class
 com\backend\murasaki\dtos\UserDTO.class
 com\backend\murasaki\dtos\HomeWorkDTO.class

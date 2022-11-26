@@ -49,106 +49,125 @@ import org.springframework.data.domain.Pageable;
         }else{
 <span class="fc" id="L50">            teacher = this.teacherService.findById(user.getTeacher().getId());</span>
         }
-<span class="fc" id="L52">        Student student = new Student(dto.getName(), dto.getJlptLevel(), teacher, dto.getPriorKnowledge(), dto.getAge(), dto.getTel(), dto.getEmail(), dto.getEmailTutor(), interests, new ArrayList&lt;&gt;());</span>
-<span class="fc" id="L53">        this.studentRepository.save(student);</span>
-<span class="fc" id="L54">        return student;</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        String emailTutor = (dto.getEmailTutor() != null) ? dto.getEmailTutor() : &quot;No tiene&quot;;</span>
+<span class="fc" id="L53">        Student student = new Student(dto.getName(), dto.getJlptLevel(), teacher, dto.getPriorKnowledge(), dto.getAge(), dto.getTel(), dto.getEmail(), emailTutor, interests, new ArrayList&lt;&gt;());</span>
+<span class="fc" id="L54">        this.studentRepository.save(student);</span>
+<span class="fc" id="L55">        return student;</span>
     }
 
     @Transactional
     public Student update(int user_id, int student_id, StudentDTO dto){
-<span class="fc" id="L59">        User userFound = this.userService.findById(user_id);</span>
-<span class="fc" id="L60">        dto.setTeacherAsignedId(userFound.getTeacher().getId());</span>
-<span class="fc" id="L61">        Student student = this.findById(student_id);</span>
-<span class="fc" id="L62">        student.setAge(dto.getAge());</span>
-<span class="fc" id="L63">        student.setEmail(dto.getEmail());</span>
-<span class="fc" id="L64">        student.setName(dto.getName());</span>
-<span class="fc" id="L65">        student.setEmailTutor(dto.getEmailTutor());</span>
-<span class="fc" id="L66">        student.setJlptLevel(dto.getJlptLevel());</span>
-<span class="fc" id="L67">        student.setPriorKnowledge(dto.getPriorKnowledge());</span>
-<span class="fc" id="L68">        student.setTel(dto.getTel());</span>
-<span class="pc bpc" id="L69" title="1 of 2 branches missed.">        if(student.getTeacherAssigned().getId() != dto.getTeacherAsignedId()){</span>
-<span class="nc" id="L70">            Teacher teacher = this.teacherService.findById(dto.getTeacherAsignedId());</span>
-<span class="nc" id="L71">            student.setTeacherAssigned(teacher);</span>
+<span class="fc" id="L60">        User userFound = this.userService.findById(user_id);</span>
+<span class="fc" id="L61">        dto.setTeacherAsignedId(userFound.getTeacher().getId());</span>
+<span class="fc" id="L62">        Student student = this.findById(student_id);</span>
+<span class="fc" id="L63">        student.setAge(dto.getAge());</span>
+<span class="fc" id="L64">        student.setEmail(dto.getEmail());</span>
+<span class="fc" id="L65">        student.setName(dto.getName());</span>
+<span class="fc" id="L66">        student.setEmailTutor(dto.getEmailTutor());</span>
+<span class="fc" id="L67">        student.setJlptLevel(dto.getJlptLevel());</span>
+<span class="fc" id="L68">        student.setPriorKnowledge(dto.getPriorKnowledge());</span>
+<span class="fc" id="L69">        student.setTel(dto.getTel());</span>
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        if(student.getTeacherAssigned().getId() != dto.getTeacherAsignedId()){</span>
+<span class="nc" id="L71">            Teacher teacher = this.teacherService.findById(dto.getTeacherAsignedId());</span>
+<span class="nc" id="L72">            student.setTeacherAssigned(teacher);</span>
         }
-<span class="fc" id="L73">        List&lt;Integer&gt; interestIds = dto.getInterests().stream().map(Interest::getId).toList();</span>
-<span class="pc bnc" id="L74" title="All 2 branches missed.">        Set&lt;Interest&gt; interests = this.interestService.findAll().stream().filter(interest -&gt; interestIds.stream().anyMatch(i -&gt; i == interest.getId())).collect(Collectors.toSet());</span>
-<span class="fc" id="L75">        student.setInterests(interests);</span>
-<span class="fc" id="L76">        return student;</span>
+<span class="fc" id="L74">        List&lt;Integer&gt; interestIds = dto.getInterests().stream().map(Interest::getId).toList();</span>
+<span class="pc bnc" id="L75" title="All 2 branches missed.">        Set&lt;Interest&gt; interests = this.interestService.findAll().stream().filter(interest -&gt; interestIds.stream().anyMatch(i -&gt; i == interest.getId())).collect(Collectors.toSet());</span>
+<span class="fc" id="L76">        student.setInterests(interests);</span>
+<span class="fc" id="L77">        return student;</span>
     }
 
     @Transactional(readOnly = true)
     public List&lt;Student&gt; findAll() {
-<span class="fc" id="L81">        return this.studentRepository.findAll();</span>
+<span class="fc" id="L82">        return this.studentRepository.findAll();</span>
     }
 
     @Transactional(readOnly = true)
     public Student findById(int student_id) {
-<span class="fc" id="L86">        return this.studentRepository.findById(student_id).orElseThrow(() -&gt; new NotFoundException(&quot;The requested Student was not found.&quot;));</span>
+<span class="fc" id="L87">        return this.studentRepository.findById(student_id).orElseThrow(() -&gt; new NotFoundException(&quot;The requested Student was not found.&quot;));</span>
     }
 
     @Transactional(readOnly = true)
     public StudentDTO findByIdDTO(int student_id) {
-<span class="fc" id="L91">        return this.findById(student_id).toDTO();</span>
+<span class="fc" id="L92">        StudentDTO dto = this.findById(student_id).toDTO();</span>
+<span class="fc" id="L93">        dto.getLessons().sort(Comparator.comparing(Lesson::getDate));</span>
+<span class="fc" id="L94">        return dto;</span>
     }
 
     @Transactional
     public Student addInterest(AddInterestDTO dto){
-<span class="nc" id="L96">        Student student = this.findById(dto.getStudent_id());</span>
-<span class="nc" id="L97">        Interest interest = this.interestService.findById(dto.getInterest_id());</span>
-<span class="nc" id="L98">        student.addInterest(interest);</span>
-<span class="nc" id="L99">        return this.studentRepository.save(student);</span>
+<span class="nc" id="L99">        Student student = this.findById(dto.getStudent_id());</span>
+<span class="nc" id="L100">        Interest interest = this.interestService.findById(dto.getInterest_id());</span>
+<span class="nc" id="L101">        student.addInterest(interest);</span>
+<span class="nc" id="L102">        return this.studentRepository.save(student);</span>
     }
 
     @Transactional
     public Student addLesson(LessonDTO dto, int student_id){
-<span class="fc" id="L104">        Student student = this.findById(student_id);</span>
-<span class="pc" id="L105">        ArrayList&lt;Link&gt; links = new ArrayList&lt;Link&gt;(dto.getLinkDTOS().stream().map(dTo -&gt; new Link(dTo.getTitle(), dTo.getUrl())).toList());</span>
+<span class="fc" id="L107">        Student student = this.findById(student_id);</span>
+<span class="pc" id="L108">        ArrayList&lt;Link&gt; links = new ArrayList&lt;Link&gt;(dto.getLinkDTOS().stream().map(dTo -&gt; new Link(dTo.getTitle(), dTo.getUrl())).toList());</span>
         //List&lt;Link&gt; links = dto.getLinkDTOS().stream().map(dTo -&gt; new Link(dTo.getTitle(), dTo.getUrl())).toList();
-<span class="fc" id="L107">        Lesson lesson = new Lesson(dto.getDate(), dto.getLessonNumber(), dto.getContent(), dto.getHomework(), links);</span>
-<span class="fc" id="L108">        this.lessonRepository.save(lesson);</span>
-<span class="fc" id="L109">        student.addLesson(lesson);</span>
-<span class="fc" id="L110">        return this.studentRepository.save(student);</span>
+<span class="fc" id="L110">        Lesson lesson = new Lesson(dto.getDate(), dto.getLessonNumber(), dto.getContent(), dto.getHomework(), links);</span>
+<span class="fc" id="L111">        this.lessonRepository.save(lesson);</span>
+<span class="fc" id="L112">        student.addLesson(lesson);</span>
+<span class="fc" id="L113">        return this.studentRepository.save(student);</span>
     }
 
     @Transactional(readOnly = true)
     public Page&lt;StudentDTOout&gt; find(int user_id, String user_role, String search_text, int page, int size){
-<span class="fc" id="L115">        Pageable p = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, &quot;name&quot;));</span>
+<span class="fc" id="L118">        Pageable p = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, &quot;name&quot;));</span>
 //        Pageable p = PageRequest.of(page, size);
         Page&lt;Student&gt; students;
-<span class="pc bpc" id="L118" title="1 of 2 branches missed.">        if(Objects.equals(user_role, &quot;administrator&quot;)){</span>
-<span class="nc bnc" id="L119" title="All 2 branches missed.">            if(this.isInteger(search_text)){</span>
-<span class="nc" id="L120">                students = this.studentRepository.findByJlptLevel(p, Integer.parseInt(search_text));</span>
+<span class="pc bpc" id="L121" title="1 of 2 branches missed.">        if(Objects.equals(user_role, &quot;administrator&quot;)){</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">            if(this.isInteger(search_text)){</span>
+<span class="nc" id="L123">                students = this.studentRepository.findByJlptLevel(p, Integer.parseInt(search_text));</span>
             }else{
-<span class="nc" id="L122">                students = this.studentRepository.findByNameLike(p,&quot;%&quot;+search_text+&quot;%&quot;);</span>
+<span class="nc" id="L125">                students = this.studentRepository.findByNameLike(p,&quot;%&quot;+search_text+&quot;%&quot;);</span>
             }
         }else{
-<span class="fc" id="L125">            User user = this.userService.findById(user_id);</span>
-<span class="pc bpc" id="L126" title="1 of 2 branches missed.">            if(this.isInteger(search_text)){</span>
-<span class="nc" id="L127">                students = this.studentRepository.findByJlptLevelAndTeacherAssigned(p, Integer.parseInt(search_text), user.getTeacher());</span>
+<span class="fc" id="L128">            User user = this.userService.findById(user_id);</span>
+<span class="pc bpc" id="L129" title="1 of 2 branches missed.">            if(this.isInteger(search_text)){</span>
+<span class="nc" id="L130">                students = this.studentRepository.findByJlptLevelAndTeacherAssigned(p, Integer.parseInt(search_text), user.getTeacher());</span>
             }else{
-<span class="fc" id="L129">                students = this.studentRepository.findByNameLikeAndTeacherAssigned(p,&quot;%&quot;+search_text+&quot;%&quot;, user.getTeacher());</span>
+<span class="fc" id="L132">                students = this.studentRepository.findByNameLikeAndTeacherAssigned(p,&quot;%&quot;+search_text+&quot;%&quot;, user.getTeacher());</span>
             }
         }
-<span class="fc" id="L132">        return students.map(student -&gt; new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getEmail(), student.getTel(), student.getTeacherAssigned().toDTO()));</span>
+<span class="fc" id="L135">        return students.map(student -&gt; new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getEmail(), student.getTel(), student.getTeacherAssigned().toDTO()));</span>
     }
 
     private boolean isInteger(String str){
-<span class="fc" id="L136">        return Pattern.matches(&quot;-?[0-9]+&quot;, str);</span>
+<span class="fc" id="L139">        return Pattern.matches(&quot;-?[0-9]+&quot;, str);</span>
     }
 
     @Transactional
     public void delete(int student_id){
-<span class="fc" id="L141">        Student student = this.findById(student_id);</span>
-<span class="fc" id="L142">        this.studentRepository.delete(student);</span>
-<span class="fc" id="L143">    }</span>
+<span class="fc" id="L144">        Student student = this.findById(student_id);</span>
+<span class="fc" id="L145">        this.studentRepository.delete(student);</span>
+<span class="fc" id="L146">    }</span>
 
     @Transactional
     public void removeLesson(int student_id, int lesson_id){
-<span class="nc" id="L147">        Student studentFound = this.findById(student_id);</span>
-<span class="nc bnc" id="L148" title="All 2 branches missed.">        Lesson lessonFound = studentFound.getLessons().stream().filter(lesson -&gt; lesson.getId() == lesson_id).findFirst().orElseThrow(() -&gt; new NotFoundException(&quot;The requested Lesson was not found.&quot;));</span>
-<span class="nc" id="L149">        studentFound.deleteLesson(lessonFound);</span>
-<span class="nc" id="L150">        this.studentRepository.save(studentFound);</span>
-<span class="nc" id="L151">    }</span>
+<span class="nc" id="L150">        Student studentFound = this.findById(student_id);</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">        Lesson lessonFound = studentFound.getLessons().stream().filter(lesson -&gt; lesson.getId() == lesson_id).findFirst().orElseThrow(() -&gt; new NotFoundException(&quot;The requested Lesson was not found.&quot;));</span>
+<span class="nc" id="L152">        studentFound.deleteLesson(lessonFound);</span>
+<span class="nc" id="L153">        this.studentRepository.save(studentFound);</span>
+<span class="nc" id="L154">    }</span>
+
+    @Transactional
+    public void translateStudents(int source_teacher_id, int target_teacher_id, TranslateStudentDTO dto){
+<span class="nc" id="L158">        Teacher sourceTeacher = this.teacherService.findById(source_teacher_id);</span>
+<span class="nc" id="L159">        Teacher targetTeacher = this.teacherService.findById(target_teacher_id);</span>
+<span class="nc" id="L160">        List&lt;Student&gt; sourceStudents = this.studentRepository.findByIdIn(dto.getSourceIds());</span>
+<span class="nc" id="L161">        List&lt;Student&gt; targetStudents = this.studentRepository.findByIdIn(dto.getTargetIds());</span>
+<span class="nc" id="L162">        sourceStudents.forEach(sourceStudent -&gt; {</span>
+<span class="nc" id="L163">            sourceStudent.setTeacherAssigned(sourceTeacher);</span>
+<span class="nc" id="L164">        });</span>
+<span class="nc" id="L165">        targetStudents.forEach(targetStudent -&gt; {</span>
+<span class="nc" id="L166">            targetStudent.setTeacherAssigned(targetTeacher);</span>
+<span class="nc" id="L167">        });</span>
+<span class="nc" id="L168">        this.studentRepository.saveAll(sourceStudents);</span>
+<span class="nc" id="L169">        this.studentRepository.saveAll(targetStudents);</span>
+<span class="nc" id="L170">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

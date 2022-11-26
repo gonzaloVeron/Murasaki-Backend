@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.backend.murasaki.controllers.StudentControllerTest
 -------------------------------------------------------------------------------
-Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.839 s - in com.backend.murasaki.controllers.StudentControllerTest
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.115 s - in com.backend.murasaki.controllers.StudentControllerTest

@@ -22,6 +22,6 @@ public interface TeacherRepository extends PagingAndSortingRepository<Teacher, I
 
     Optional<Teacher> findByName(String teacherName);
 
-    Page<Teacher> findByNameLike(Pageable pageable, String text);
+    Page<Teacher> findByNameLikeAndIdNotIn(Pageable pageable, String text, List<Integer> ids);
 
 }

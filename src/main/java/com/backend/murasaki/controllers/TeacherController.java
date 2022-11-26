@@ -1,16 +1,18 @@
 package com.backend.murasaki.controllers;
 
 import com.backend.murasaki.dtos.TeacherDTO;
+import com.backend.murasaki.dtos.TranslateStudentDTO;
 import com.backend.murasaki.models.Teacher;
 import com.backend.murasaki.services.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/teacher")
+@RequestMapping("api/v1/teacher/jwt")
 public class TeacherController {
 
     @Autowired
@@ -36,14 +38,16 @@ public class TeacherController {
 
     @GetMapping(path = "/find/{search_text}")
     @ResponseBody
-    public Page<Teacher> find(@PathVariable String search_text, @RequestParam int page, @RequestParam int size){
-        return this.teacherService.find(search_text, page, size);
+    public Page<Teacher> find(HttpServletRequest request, @PathVariable String search_text, @RequestParam int page, @RequestParam int size){
+        int user_id = (int)request.getAttribute("user_id");
+        return this.teacherService.find(user_id, search_text, page, size);
     }
 
     @GetMapping(path = "/find")
     @ResponseBody
-    public Page<Teacher> findAll(@RequestParam int page, @RequestParam int size){
-        return this.teacherService.find("", page, size);
+    public Page<Teacher> findAll(HttpServletRequest request, @RequestParam int page, @RequestParam int size){
+        int user_id = (int)request.getAttribute("user_id");
+        return this.teacherService.find(user_id,"", page, size);
     }
 
     @DeleteMapping(path = "{teacher_id}")
@@ -57,6 +61,10 @@ public class TeacherController {
         return this.teacherService.update(teacher_id, dto);
     }
 
-
+//    @PostMapping(path = "/jwt/{source_teacher_id}/{target_teacher_id}")
+//    @ResponseBody
+//    public Teacher translateStudents(@PathVariable int source_teacher_id, @PathVariable int target_teacher_id, @RequestBody TranslateStudentDTO dto){
+//        return this.teacherService.translateStudents(source_teacher_id, target_teacher_id, dto);
+//    }
 
 }

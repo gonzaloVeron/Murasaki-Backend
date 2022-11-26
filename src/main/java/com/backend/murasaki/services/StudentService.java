@@ -49,7 +49,8 @@ public class StudentService {
         }else{
             teacher = this.teacherService.findById(user.getTeacher().getId());
         }
-        Student student = new Student(dto.getName(), dto.getJlptLevel(), teacher, dto.getPriorKnowledge(), dto.getAge(), dto.getTel(), dto.getEmail(), dto.getEmailTutor(), interests, new ArrayList<>());
+        String emailTutor = (dto.getEmailTutor() != null) ? dto.getEmailTutor() : "No tiene";
+        Student student = new Student(dto.getName(), dto.getJlptLevel(), teacher, dto.getPriorKnowledge(), dto.getAge(), dto.getTel(), dto.getEmail(), emailTutor, interests, new ArrayList<>());
         this.studentRepository.save(student);
         return student;
     }
@@ -88,7 +89,9 @@ public class StudentService {
 
     @Transactional(readOnly = true)
     public StudentDTO findByIdDTO(int student_id) {
-        return this.findById(student_id).toDTO();
+        StudentDTO dto = this.findById(student_id).toDTO();
+        dto.getLessons().sort(Comparator.comparing(Lesson::getDate));
+        return dto;
     }
 
     @Transactional
@@ -148,6 +151,22 @@ public class StudentService {
         Lesson lessonFound = studentFound.getLessons().stream().filter(lesson -> lesson.getId() == lesson_id).findFirst().orElseThrow(() -> new NotFoundException("The requested Lesson was not found."));
         studentFound.deleteLesson(lessonFound);
         this.studentRepository.save(studentFound);
+    }
+
+    @Transactional
+    public void translateStudents(int source_teacher_id, int target_teacher_id, TranslateStudentDTO dto){
+        Teacher sourceTeacher = this.teacherService.findById(source_teacher_id);
+        Teacher targetTeacher = this.teacherService.findById(target_teacher_id);
+        List<Student> sourceStudents = this.studentRepository.findByIdIn(dto.getSourceIds());
+        List<Student> targetStudents = this.studentRepository.findByIdIn(dto.getTargetIds());
+        sourceStudents.forEach(sourceStudent -> {
+            sourceStudent.setTeacherAssigned(sourceTeacher);
+        });
+        targetStudents.forEach(targetStudent -> {
+            targetStudent.setTeacherAssigned(targetTeacher);
+        });
+        this.studentRepository.saveAll(sourceStudents);
+        this.studentRepository.saveAll(targetStudents);
     }
 
 }

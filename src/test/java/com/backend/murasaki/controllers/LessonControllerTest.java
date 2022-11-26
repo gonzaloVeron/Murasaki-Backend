@@ -57,7 +57,7 @@ class LessonControllerTest {
 
     @Test
     void getAllTest() throws Exception {
-        this.mvc.perform(get("/api/v1/lesson"))
+        this.mvc.perform(get("/api/v1/lesson/jwt"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
@@ -72,7 +72,7 @@ class LessonControllerTest {
 
     @Test
     void getByExistentId() throws Exception {
-        this.mvc.perform(get("/api/v1/lesson/{lesson_id}", 19))
+        this.mvc.perform(get("/api/v1/lesson/jwt/{lesson_id}", 19))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(19))
@@ -85,7 +85,7 @@ class LessonControllerTest {
 
     @Test
     void getByInexistentIdTest() throws Exception {
-        this.mvc.perform(get("/api/v1/lesson/{lesson_id}", 66))
+        this.mvc.perform(get("/api/v1/lesson/jwt/{lesson_id}", 66))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

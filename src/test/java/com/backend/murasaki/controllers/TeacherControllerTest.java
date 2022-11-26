@@ -51,7 +51,7 @@ class TeacherControllerTest {
 
     @Test
     void getAllTest() throws Exception {
-        this.mvc.perform(get("/api/v1/teacher"))
+        this.mvc.perform(get("/api/v1/teacher/jwt"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
@@ -64,7 +64,7 @@ class TeacherControllerTest {
 
     @Test
     void getByExistentIdTest() throws Exception {
-        this.mvc.perform(get("/api/v1/teacher/{teacher_id}", 4))
+        this.mvc.perform(get("/api/v1/teacher/jwt/{teacher_id}", 4))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(4))
@@ -73,34 +73,32 @@ class TeacherControllerTest {
 
     @Test
     void getByInexistentIdTest() throws Exception {
-        this.mvc.perform(get("/api/v1/teacher/{teacher_id}", 15))
+        this.mvc.perform(get("/api/v1/teacher/jwt/{teacher_id}", 15))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void findTest() throws Exception {
-        this.mvc.perform(get("/api/v1/teacher/find/{search_text}", "or").param("page", "0").param("size", "5"))
+        this.mvc.perform(get("/api/v1/teacher/jwt/find/{search_text}", "or").param("page", "0").param("size", "5").requestAttr("user_id", 7))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content.length()").value(1))
+                .andExpect(jsonPath("$.content[?(@.name == '%s')]", "Julian Borja").exists())
+                .andExpect(jsonPath("$.content[?(@.name == '%s')]", "Administrador").doesNotExist());
+    }
+
+    @Test
+    void findAllTest() throws Exception {
+        this.mvc.perform(get("/api/v1/teacher/jwt/find").param("page", "0").param("size", "5").requestAttr("user_id", 7))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isArray())
                 .andExpect(jsonPath("$.content.length()").value(2))
                 .andExpect(jsonPath("$.content[?(@.name == '%s')]", "Julian Borja").exists())
-                .andExpect(jsonPath("$.content[?(@.name == '%s')]", "Administrador").exists());
-    }
-
-    @Test
-    void findAllTest() throws Exception {
-        this.mvc.perform(get("/api/v1/teacher/find").param("page", "0").param("size", "5"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content").isArray())
-                .andExpect(jsonPath("$.content.length()").value(4))
-                .andExpect(jsonPath("$.content[?(@.name == '%s')]", "Julian Borja").exists())
-                //.andExpect(jsonPath("$.content[?(@.name == '%s')]", "Gonzalo G. Verón").exists())
                 .andExpect(jsonPath("$.content[?(@.name == '%s')]", "Test").exists())
-                .andExpect(jsonPath("$.content[?(@.name == '%s')]", "Administrador").exists());
-        //asd
+                .andExpect(jsonPath("$.content[?(@.name == '%s')]", "Administrador").doesNotExist());
     }
 
     @Test
@@ -115,7 +113,7 @@ class TeacherControllerTest {
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson = ow.writeValueAsString(obj);
 
-        MvcResult result = this.mvc.perform(post("/api/v1/teacher").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
+        MvcResult result = this.mvc.perform(post("/api/v1/teacher/jwt").contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", 1).exists())
@@ -125,11 +123,11 @@ class TeacherControllerTest {
 
     @Test
     void deleteTest() throws Exception {
-        this.mvc.perform(delete("/api/v1/teacher/{teacher_id}", 8))
+        this.mvc.perform(delete("/api/v1/teacher/jwt/{teacher_id}", 8))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mvc.perform(get("/api/v1/teacher/{teacher_id}", 8))
+        this.mvc.perform(get("/api/v1/teacher/jwt/{teacher_id}", 8))
                 .andExpect(status().isNotFound());
     }
 
@@ -145,7 +143,7 @@ class TeacherControllerTest {
         ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
         String requestJson = ow.writeValueAsString(obj);
 
-        MvcResult result = this.mvc.perform(put("/api/v1/teacher/{teacher_id}", 6).contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
+        MvcResult result = this.mvc.perform(put("/api/v1/teacher/jwt/{teacher_id}", 6).contentType(MediaType.APPLICATION_JSON_VALUE).content(requestJson))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", 6).exists())

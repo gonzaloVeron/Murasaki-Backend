@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(&quot;/api/v1/lesson&quot;)
+@RequestMapping(&quot;/api/v1/lesson/jwt&quot;)
 <span class="fc" id="L13">public class LessonController {</span>
 
     @Autowired
@@ -27,7 +27,7 @@ import java.util.List;
 <span class="fc" id="L27">        return this.lessonService.findById(lesson_id);</span>
     }
 
-    @PutMapping(path = &quot;/jwt/{lesson_id}&quot;)
+    @PutMapping(path = &quot;{lesson_id}&quot;)
     @ResponseBody
     public Lesson updateLesson(@PathVariable int lesson_id, @RequestBody LessonDTO dto){
 <span class="nc" id="L33">        return this.lessonService.update(lesson_id, dto);</span>

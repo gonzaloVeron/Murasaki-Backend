@@ -23,6 +23,7 @@ C:\xampp\htdocs\Murasaki-Backend\src\main\java\com\backend\murasaki\repositories
 C:\xampp\htdocs\Murasaki-Backend\src\main\java\com\backend\murasaki\exceptions\HttpErrorException.java
 C:\xampp\htdocs\Murasaki-Backend\src\main\java\com\backend\murasaki\dtos\UserCredentialsDTO.java
 C:\xampp\htdocs\Murasaki-Backend\src\main\java\com\backend\murasaki\dtos\InterestDTO.java
+C:\xampp\htdocs\Murasaki-Backend\src\main\java\com\backend\murasaki\dtos\TranslateStudentDTO.java
 C:\xampp\htdocs\Murasaki-Backend\src\main\java\com\backend\murasaki\models\Link.java
 C:\xampp\htdocs\Murasaki-Backend\src\main\java\com\backend\murasaki\models\HomeWork.java
 C:\xampp\htdocs\Murasaki-Backend\src\main\java\com\backend\murasaki\services\TeacherService.java

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TranslateStudentDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">murasaki</a> &gt; <a href="index.source.html" class="el_package">com.backend.murasaki.dtos</a> &gt; <span class="el_source">TranslateStudentDTO.java</span></div><h1>TranslateStudentDTO.java</h1><pre class="source lang-java linenums">package com.backend.murasaki.dtos;
+
+import java.util.List;
+
+public class TranslateStudentDTO {
+
+    private List&lt;Integer&gt; sourceIds;
+
+    private List&lt;Integer&gt; targetIds;
+
+<span class="nc" id="L11">    public TranslateStudentDTO(){</span>
+
+<span class="nc" id="L13">    }</span>
+
+<span class="nc" id="L15">    public TranslateStudentDTO(List&lt;Integer&gt; sourceIds, List&lt;Integer&gt; targetIds){</span>
+<span class="nc" id="L16">        this.sourceIds = sourceIds;</span>
+<span class="nc" id="L17">        this.targetIds = targetIds;</span>
+<span class="nc" id="L18">    }</span>
+
+    public List&lt;Integer&gt; getSourceIds() {
+<span class="nc" id="L21">        return sourceIds;</span>
+    }
+
+    public void setSourceIds(List&lt;Integer&gt; sourceIds) {
+<span class="nc" id="L25">        this.sourceIds = sourceIds;</span>
+<span class="nc" id="L26">    }</span>
+
+    public List&lt;Integer&gt; getTargetIds() {
+<span class="nc" id="L29">        return targetIds;</span>
+    }
+
+    public void setTargetIds(List&lt;Integer&gt; targetIds) {
+<span class="nc" id="L33">        this.targetIds = targetIds;</span>
+<span class="nc" id="L34">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
