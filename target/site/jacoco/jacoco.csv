@@ -1,5 +1,5 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-murasaki,com.backend.murasaki.dtos,LinkDTO,45,0,0,0,20,0,9,0,9,0
+murasaki,com.backend.murasaki.dtos,LinkDTO,0,45,0,0,0,20,0,9,0,9
 murasaki,com.backend.murasaki.dtos,StudentDTO,36,67,0,0,18,24,9,12,9,12
 murasaki,com.backend.murasaki.dtos,LessonDTO,18,38,0,0,7,17,1,11,1,11
 murasaki,com.backend.murasaki.dtos,AddInterestDTO,26,0,0,0,12,0,6,0,6,0
@@ -19,7 +19,7 @@ murasaki,com.backend.murasaki.services,JwtService,19,40,0,0,3,5,1,2,1,2
 murasaki,com.backend.murasaki.services,InterestService,5,62,0,0,0,11,1,7,1,7
 murasaki,com.backend.murasaki.services,StudentService,179,299,13,5,29,47,19,14,10,14
 murasaki,com.backend.murasaki.services,LinkService,31,3,0,0,3,1,3,1,3,1
-murasaki,com.backend.murasaki.services,LessonService,222,21,14,0,22,3,20,4,13,4
+murasaki,com.backend.murasaki.services,LessonService,55,188,4,10,4,21,7,17,3,14
 murasaki,com.backend.murasaki.services,UserService,76,197,1,1,9,33,8,10,7,10
 murasaki,com.backend.murasaki.services,TeacherService,18,100,0,0,1,17,3,8,3,8
 murasaki,com.backend.murasaki.exceptions,HttpErrorException,10,0,0,0,4,0,2,0,2,0
@@ -28,12 +28,12 @@ murasaki,com.backend.murasaki.exceptions,UnauthorizedException,4,0,0,0,2,0,1,0,1
 murasaki,com.backend.murasaki.models,Interest,24,21,0,0,11,9,4,5,4,5
 murasaki,com.backend.murasaki.models,Student,60,132,0,0,23,44,6,23,6,23
 murasaki,com.backend.murasaki.models,Teacher,20,33,0,0,9,12,3,7,3,7
-murasaki,com.backend.murasaki.models,Link,33,12,0,0,15,5,5,4,5,4
+murasaki,com.backend.murasaki.models,Link,4,41,0,0,2,18,1,8,1,8
 murasaki,com.backend.murasaki.models,Role,14,9,0,0,7,4,3,3,3,3
-murasaki,com.backend.murasaki.models,Lesson,45,39,0,0,20,15,7,8,7,8
+murasaki,com.backend.murasaki.models,Lesson,29,55,0,0,12,23,3,12,3,12
 murasaki,com.backend.murasaki.models,User,38,33,0,0,17,12,6,7,6,7
 murasaki,com.backend.murasaki.interceptors,JwtInterceptor,50,0,2,0,14,0,3,0,2,0
-murasaki,com.backend.murasaki.controllers,LessonController,6,12,0,0,1,3,1,3,1,3
+murasaki,com.backend.murasaki.controllers,LessonController,0,18,0,0,0,4,0,4,0,4
 murasaki,com.backend.murasaki.controllers,TeacherController,0,58,0,0,0,11,0,8,0,8
 murasaki,com.backend.murasaki.controllers,StudentController,13,111,0,0,4,16,2,10,2,10
 murasaki,com.backend.murasaki.controllers,UserController,17,18,0,0,5,4,2,4,2,4

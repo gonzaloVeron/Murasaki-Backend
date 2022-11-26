@@ -30,7 +30,7 @@ import java.util.List;
     @PutMapping(path = &quot;{lesson_id}&quot;)
     @ResponseBody
     public Lesson updateLesson(@PathVariable int lesson_id, @RequestBody LessonDTO dto){
-<span class="nc" id="L33">        return this.lessonService.update(lesson_id, dto);</span>
+<span class="fc" id="L33">        return this.lessonService.update(lesson_id, dto);</span>
     }
 
 }

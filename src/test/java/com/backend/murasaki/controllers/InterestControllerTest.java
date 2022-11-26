@@ -119,8 +119,6 @@ class InterestControllerTest {
                 .andExpect(jsonPath("$.name", "test").exists())
                 .andExpect(jsonPath("$.icon", "fa-solid fa-bell").exists())
                 .andReturn();
-
-        //Interest i = mapper.readValue(result.getResponse().getContentAsString(), Interest.class);
     }
 
     @Test
