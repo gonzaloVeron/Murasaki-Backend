@@ -44,7 +44,8 @@ public class TeacherService {
 
     @Transactional(readOnly = true)
     public List<Teacher> findAll() {
-        return this.teacherRepository.findAll();
+        List<Teacher> teachers = this.teacherRepository.findAll();
+        return teachers.stream().filter(teacher -> teacher.getId() != 0).toList();
     }
 
     @Transactional(readOnly = true)

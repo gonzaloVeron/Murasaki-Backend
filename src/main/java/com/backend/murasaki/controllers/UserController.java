@@ -49,4 +49,11 @@ public class UserController {
         this.userService.changeUserPassword(user_id, password);
     }
 
+    @GetMapping(path = "/jwt/needChangePass")
+    @ResponseBody
+    public boolean needChangePassword(HttpServletRequest request){
+        int user_id = (int)request.getAttribute("user_id");
+        return this.userService.needChangePass(user_id);
+    }
+
 }

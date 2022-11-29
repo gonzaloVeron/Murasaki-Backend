@@ -20,7 +20,6 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import java.util.Random;
 
 @Service
 public class UserService {
@@ -49,7 +48,7 @@ public class UserService {
         Teacher teacherFound = this.teacherService.save(teacherDTO);
         String randomPass = this.generateSecureRandomPassword();
         Role teacherRole = this.roleService.getRole("teacher");
-        User user = this.userRepository.save(new User(dto.getEmail(), this.hashPassword(randomPass), teacherFound, teacherRole));
+        User user = this.userRepository.save(new User(dto.getEmail(), this.hashPassword(randomPass), teacherFound, teacherRole, true));
         this.sendMailService.sendMail(
           "gonveron96@gmail.com", dto.getEmail(), "Murasaki", "Su password es: " + randomPass
         );
@@ -92,7 +91,14 @@ public class UserService {
     public void changeUserPassword(int id, String password){
         User userFound = this.userRepository.findById(id).orElseThrow(() -> new NotFoundException("The requested user was not found."));
         userFound.setPassword(this.hashPassword(password));
+        userFound.setFirstTime(false);
         this.userRepository.save(userFound);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean needChangePass(int user_id){
+        User userFound = this.userRepository.findById(user_id).orElseThrow(() -> new NotFoundException("The requested user was not found."));
+        return userFound.isFirstTime();
     }
 
     private String hashPassword(String password){

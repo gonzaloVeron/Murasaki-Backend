@@ -28,21 +28,26 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
+    @Column
+    private boolean isFirstTime;
+
     public User(){ }
 
-    public User(int id, String email, String password, Teacher teacher, Role role){
+    public User(int id, String email, String password, Teacher teacher, Role role, boolean isFirstTime){
         this.id = id;
         this.email = email;
         this.password = password;
         this.teacher = teacher;
         this.role = role;
+        this.isFirstTime = isFirstTime;
     }
 
-    public User(String email, String password, Teacher teacher, Role role){
+    public User(String email, String password, Teacher teacher, Role role, boolean isFirstTime){
         this.email = email;
         this.password = password;
         this.teacher = teacher;
         this.role = role;
+        this.isFirstTime = isFirstTime;
     }
 
     public int getId() {
@@ -85,4 +90,11 @@ public class User {
         this.role = role;
     }
 
+    public boolean isFirstTime() {
+        return isFirstTime;
+    }
+
+    public void setFirstTime(boolean firstTime) {
+        isFirstTime = firstTime;
+    }
 }
