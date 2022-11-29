@@ -24,9 +24,9 @@ INSERT INTO `interests` (`id`,`icon`,`name`) VALUES (15,'pi pi-box','Hobby');
 INSERT INTO `interests` (`id`,`icon`,`name`) VALUES (22,'pi pi-book','Historia');
 INSERT INTO `interests` (`id`,`icon`,`name`) VALUES (23,'pi pi-book','Test');
 
-INSERT INTO `users` (`id`,`email`,`password`,`teacher_id`,`role_id`) VALUES (9,'borja@gmail.com','$2a$10$F1k1JmPFBTyJhn8ibaseFuthOKNTr0iomCKkDNJEtEflI7o46RlTu',4,76);
-INSERT INTO `users` (`id`,`email`,`password`,`teacher_id`,`role_id`) VALUES (7,'gonveron96@gmail.com','$2a$10$6JUjLc2S45LOCypJccxmb.M2UtEoJpPLnh.SxcmMHUar5lCi8Ueq2',6,76);
-INSERT INTO `users` (`id`,`email`,`password`,`teacher_id`,`role_id`) VALUES (77,'admin@murasaki.com','$2a$10$qNOXK67nz7.vYQD83ovD1uUQlS9zsvZyfbCj.wZhDj9QXetlGiOI.',0,75);
+INSERT INTO `users` (`id`,`email`,`password`,`teacher_id`,`role_id`,`is_first_time`) VALUES (9,'borja@gmail.com','$2a$10$F1k1JmPFBTyJhn8ibaseFuthOKNTr0iomCKkDNJEtEflI7o46RlTu',4,76,0);
+INSERT INTO `users` (`id`,`email`,`password`,`teacher_id`,`role_id`,`is_first_time`) VALUES (7,'gonveron96@gmail.com','$2a$10$6JUjLc2S45LOCypJccxmb.M2UtEoJpPLnh.SxcmMHUar5lCi8Ueq2',6,76,0);
+INSERT INTO `users` (`id`,`email`,`password`,`teacher_id`,`role_id`,`is_first_time`) VALUES (77,'admin@murasaki.com','$2a$10$qNOXK67nz7.vYQD83ovD1uUQlS9zsvZyfbCj.wZhDj9QXetlGiOI.',0,75,0);
 
 INSERT INTO `students` (`id`,`age`,`email`,`email_tutor`,`jlpt_level`,`name`,`prior_knowledge`,`tel`,`teacher_id`) VALUES (5,18,'angeles@gmail.com','tutor1@gmail.com',4,'Angeles Barroso','Estudio japonés con anterioridad.',1162641228,4);
 INSERT INTO `students` (`id`,`age`,`email`,`email_tutor`,`jlpt_level`,`name`,`prior_knowledge`,`tel`,`teacher_id`) VALUES (8,25,'vic@gmail.com','tutor2@gmail.com',5,'Victor Seoane','No tiene.',1162641228,6);

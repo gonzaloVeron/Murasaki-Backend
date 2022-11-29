@@ -55,11 +55,11 @@ class TeacherControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$.length()").value(4))
+                .andExpect(jsonPath("$.length()").value(3))
                 .andExpect(jsonPath("$[?(@.name == '%s')]", "Julian Borja").exists())
                 //.andExpect(jsonPath("$[?(@.name == '%s')]", "Gonzalo G. Verón").exists())
                 .andExpect(jsonPath("$[?(@.name == '%s')]", "Test").exists())
-                .andExpect(jsonPath("$[?(@.name == '%s')]", "Administrador").exists());
+                .andExpect(jsonPath("$[?(@.name == '%s')]", "Administrador").doesNotExist());
     }
 
     @Test
