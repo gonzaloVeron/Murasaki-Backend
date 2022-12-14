@@ -15,16 +15,19 @@ public class LessonDTO {
 
     private List<LinkDTO> linkDTOS;
 
+    private String title;
+
     public LessonDTO(){
 
     }
 
-    public LessonDTO(Date date, int lessonNumber, String content, String homework, List<LinkDTO> linkDTOS){
+    public LessonDTO(Date date, int lessonNumber, String content, String homework, List<LinkDTO> linkDTOS, String title){
         this.date = date;
         this.lessonNumber = lessonNumber;
         this.content = content;
         this.homework = homework;
         this.linkDTOS = linkDTOS;
+        this.title = title;
     }
 
     public Date getDate() {
@@ -67,4 +70,11 @@ public class LessonDTO {
         this.linkDTOS = linkDTOS;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

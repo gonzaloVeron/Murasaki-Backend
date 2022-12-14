@@ -58,7 +58,7 @@ public class StudentService {
     @Transactional
     public Student update(int user_id, int student_id, StudentDTO dto){
         User userFound = this.userService.findById(user_id);
-        dto.setTeacherAsignedId(userFound.getTeacher().getId());
+        //dto.setTeacherAsignedId(userFound.getTeacher().getId());
         Student student = this.findById(student_id);
         student.setAge(dto.getAge());
         student.setEmail(dto.getEmail());
@@ -67,10 +67,14 @@ public class StudentService {
         student.setJlptLevel(dto.getJlptLevel());
         student.setPriorKnowledge(dto.getPriorKnowledge());
         student.setTel(dto.getTel());
-        if(student.getTeacherAssigned().getId() != dto.getTeacherAsignedId()){
+        if(userFound.getRole().getName().equals("administrator")){
             Teacher teacher = this.teacherService.findById(dto.getTeacherAsignedId());
             student.setTeacherAssigned(teacher);
         }
+//        if(student.getTeacherAssigned().getId() != dto.getTeacherAsignedId()){
+//            Teacher teacher = this.teacherService.findById(dto.getTeacherAsignedId());
+//            student.setTeacherAssigned(teacher);
+//        }
         List<Integer> interestIds = dto.getInterests().stream().map(Interest::getId).toList();
         Set<Interest> interests = this.interestService.findAll().stream().filter(interest -> interestIds.stream().anyMatch(i -> i == interest.getId())).collect(Collectors.toSet());
         student.setInterests(interests);
@@ -107,7 +111,7 @@ public class StudentService {
         Student student = this.findById(student_id);
         ArrayList<Link> links = new ArrayList<Link>(dto.getLinkDTOS().stream().map(dTo -> new Link(dTo.getTitle(), dTo.getUrl())).toList());
         //List<Link> links = dto.getLinkDTOS().stream().map(dTo -> new Link(dTo.getTitle(), dTo.getUrl())).toList();
-        Lesson lesson = new Lesson(dto.getDate(), dto.getLessonNumber(), dto.getContent(), dto.getHomework(), links);
+        Lesson lesson = new Lesson(dto.getDate(), dto.getLessonNumber(), dto.getContent(), dto.getHomework(), links, dto.getTitle());
         this.lessonRepository.save(lesson);
         student.addLesson(lesson);
         return this.studentRepository.save(student);

@@ -32,25 +32,30 @@ public class Lesson {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Link> links;
 
+    @Column
+    private String title;
+
     public Lesson(){
 
     }
 
-    public Lesson(int id, Date date, int lessonNumber, String content, String homework, List<Link> links){
+    public Lesson(int id, Date date, int lessonNumber, String content, String homework, List<Link> links, String title){
         this.id = id;
         this.date = date;
         this.lessonNumber = lessonNumber;
         this.content = content;
         this.homework = homework;
         this.links = links;
+        this.title = title;
     }
 
-    public Lesson(Date date, int lessonNumber, String content, String homework, List<Link> links){
+    public Lesson(Date date, int lessonNumber, String content, String homework, List<Link> links, String title){
         this.date = date;
         this.lessonNumber = lessonNumber;
         this.content = content;
         this.homework = homework;
         this.links = links;
+        this.title = title;
     }
 
     public int getId() {
@@ -101,4 +106,11 @@ public class Lesson {
         this.links = links;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

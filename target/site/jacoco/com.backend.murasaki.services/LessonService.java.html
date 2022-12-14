@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
     @Transactional
     public Lesson save(LessonDTO dto) {
 <span class="nc" id="L31">        ArrayList&lt;Link&gt; links = new ArrayList&lt;Link&gt;(dto.getLinkDTOS().stream().map(dTo -&gt; new Link(dTo.getTitle(), dTo.getUrl())).toList());</span>
-<span class="nc" id="L32">        Lesson lesson = new Lesson(dto.getDate(), dto.getLessonNumber(), dto.getContent(), dto.getHomework(), links);</span>
+<span class="nc" id="L32">        Lesson lesson = new Lesson(dto.getDate(), dto.getLessonNumber(), dto.getContent(), dto.getHomework(), links, dto.getTitle());</span>
 <span class="nc" id="L33">        return this.lessonRepository.save(lesson);</span>
     }
 
@@ -50,33 +50,34 @@ import java.util.stream.Collectors;
 <span class="fc" id="L50">        lessonFound.setContent(dto.getContent());</span>
 <span class="fc" id="L51">        lessonFound.setDate(dto.getDate());</span>
 <span class="fc" id="L52">        lessonFound.setHomework(dto.getHomework());</span>
+<span class="fc" id="L53">        lessonFound.setTitle(dto.getTitle());</span>
 
-<span class="fc bfc" id="L54" title="All 2 branches covered.">        List&lt;Link&gt; newLinks = dto.getLinkDTOS().stream().filter(ldto -&gt; ldto.getId() == null).map(ldto -&gt; new Link(ldto.getTitle(), ldto.getUrl())).toList();</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        List&lt;Link&gt; newLinks = dto.getLinkDTOS().stream().filter(ldto -&gt; ldto.getId() == null).map(ldto -&gt; new Link(ldto.getTitle(), ldto.getUrl())).toList();</span>
 
-<span class="fc bfc" id="L56" title="All 2 branches covered.">        List&lt;Link&gt; toUpdateLinks = dto.getLinkDTOS().stream().filter(ldto -&gt; ldto.getId() != null).map(ldto -&gt; new Link(ldto.getId(), ldto.getTitle(), ldto.getUrl())).toList();</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        List&lt;Link&gt; toUpdateLinks = dto.getLinkDTOS().stream().filter(ldto -&gt; ldto.getId() != null).map(ldto -&gt; new Link(ldto.getId(), ldto.getTitle(), ldto.getUrl())).toList();</span>
 
-<span class="fc" id="L58">        List&lt;Integer&gt; ids = dto.getLinkDTOS().stream().map(dTo -&gt; dTo.getId()).toList();</span>
+<span class="fc" id="L59">        List&lt;Integer&gt; ids = dto.getLinkDTOS().stream().map(dTo -&gt; dTo.getId()).toList();</span>
 
-<span class="fc" id="L60">        List&lt;Link&gt; linksToRemove = this.filterLinksByIds(lessonFound.getLinks(), ids);</span>
+<span class="fc" id="L61">        List&lt;Link&gt; linksToRemove = this.filterLinksByIds(lessonFound.getLinks(), ids);</span>
 
-<span class="pc bpc" id="L62" title="1 of 2 branches missed.">        for(int i = 0; i &lt; linksToRemove.size(); i++){</span>
-<span class="nc" id="L63">            lessonFound.getLinks().remove(linksToRemove.get(i));</span>
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">        for(int i = 0; i &lt; linksToRemove.size(); i++){</span>
+<span class="nc" id="L64">            lessonFound.getLinks().remove(linksToRemove.get(i));</span>
         }
 
-<span class="fc bfc" id="L66" title="All 2 branches covered.">        for(int i = 0; i &lt; toUpdateLinks.size(); i++){</span>
-<span class="fc" id="L67">            Link actual = toUpdateLinks.get(i);</span>
-<span class="pc bpc" id="L68" title="1 of 2 branches missed.">            Link found = lessonFound.getLinks().stream().filter(link -&gt; link.getId() == actual.getId()).findFirst().orElseThrow(() -&gt; new NotFoundException(&quot;The link requested was not found.&quot;));</span>
-<span class="fc" id="L69">            found.setTitle(actual.getTitle());</span>
-<span class="fc" id="L70">            found.setUrl(actual.getUrl());</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        for(int i = 0; i &lt; toUpdateLinks.size(); i++){</span>
+<span class="fc" id="L68">            Link actual = toUpdateLinks.get(i);</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">            Link found = lessonFound.getLinks().stream().filter(link -&gt; link.getId() == actual.getId()).findFirst().orElseThrow(() -&gt; new NotFoundException(&quot;The link requested was not found.&quot;));</span>
+<span class="fc" id="L70">            found.setTitle(actual.getTitle());</span>
+<span class="fc" id="L71">            found.setUrl(actual.getUrl());</span>
         }
 
-<span class="fc" id="L73">        lessonFound.getLinks().addAll(newLinks);</span>
+<span class="fc" id="L74">        lessonFound.getLinks().addAll(newLinks);</span>
 
-<span class="fc" id="L75">        return this.lessonRepository.save(lessonFound);</span>
+<span class="fc" id="L76">        return this.lessonRepository.save(lessonFound);</span>
     }
 
     private List&lt;Link&gt; filterLinksByIds(List&lt;Link&gt; links, List&lt;Integer&gt; ids){
-<span class="pc bpc" id="L79" title="2 of 4 branches missed.">        return links.stream().filter(link -&gt; !ids.stream().anyMatch(n -&gt; n == link.getId())).toList();</span>
+<span class="pc bpc" id="L80" title="2 of 4 branches missed.">        return links.stream().filter(link -&gt; !ids.stream().anyMatch(n -&gt; n == link.getId())).toList();</span>
     }
 
 }

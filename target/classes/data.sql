@@ -6,10 +6,10 @@ INSERT INTO `teachers` (`id`,`name`) VALUES (6,'Gonzalo G. Verón');
 INSERT INTO `teachers` (`id`,`name`) VALUES (8,'Test');
 INSERT INTO `teachers` (`id`, `name`) VALUES (0, 'Administrador');
 
-INSERT INTO `lessons` (`id`,`content`,`date`,`homework`,`lesson_number`) VALUES (17,'Estudiamos Katakanas.','2022-11-04','Le deje tres ejercicios para practicar sobre Katakanas.',0);
-INSERT INTO `lessons` (`id`,`content`,`date`,`homework`,`lesson_number`) VALUES (19,'test','2022-11-04','test',0);
-INSERT INTO `lessons` (`id`,`content`,`date`,`homework`,`lesson_number`) VALUES (31,'Hablamos sobre sus intereses y aspiraciones con respecto al estudio de japonés y empezamos a ver sobre los Kanji.','2022-11-04','Dejé tres Kanji para que traduzca.',0);
-INSERT INTO `lessons` (`id`,`content`,`date`,`homework`,`lesson_number`) VALUES (36,'Estuvimos estudiando los Kanjis.','2022-11-04','Deje para que traduzca varios Kanjis',0);
+INSERT INTO `lessons` (`id`,`content`,`date`,`homework`,`lesson_number`,`title`) VALUES (17,'Estudiamos Katakanas.','2022-11-04','Le deje tres ejercicios para practicar sobre Katakanas.',0,'titulo4');
+INSERT INTO `lessons` (`id`,`content`,`date`,`homework`,`lesson_number`,`title`) VALUES (19,'test','2022-11-04','test',0,'titulo3');
+INSERT INTO `lessons` (`id`,`content`,`date`,`homework`,`lesson_number`,`title`) VALUES (31,'Hablamos sobre sus intereses y aspiraciones con respecto al estudio de japonés y empezamos a ver sobre los Kanji.','2022-11-04','Dejé tres Kanji para que traduzca.',0,'titulo2');
+INSERT INTO `lessons` (`id`,`content`,`date`,`homework`,`lesson_number`,`title`) VALUES (36,'Estuvimos estudiando los Kanjis.','2022-11-04','Deje para que traduzca varios Kanjis',0,'titulo1');
 
 INSERT INTO `links` (`id`,`title`,`url`) VALUES (18,'Google','www.google.com.ar');
 INSERT INTO `links` (`id`,`title`,`url`) VALUES (20,'Prime','https://www.primefaces.org/primeflex/formlayout');

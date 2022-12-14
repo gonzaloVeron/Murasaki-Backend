@@ -49,5 +49,12 @@ import javax.servlet.http.HttpServletRequest;
 <span class="nc" id="L49">        this.userService.changeUserPassword(user_id, password);</span>
 <span class="nc" id="L50">    }</span>
 
+    @GetMapping(path = &quot;/jwt/needChangePass&quot;)
+    @ResponseBody
+    public boolean needChangePassword(HttpServletRequest request){
+<span class="nc" id="L55">        int user_id = (int)request.getAttribute(&quot;user_id&quot;);</span>
+<span class="nc" id="L56">        return this.userService.needChangePass(user_id);</span>
+    }
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

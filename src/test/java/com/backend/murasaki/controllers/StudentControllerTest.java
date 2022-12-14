@@ -227,6 +227,8 @@ class StudentControllerTest {
             public String homework = "The homework";
 
             public List<LinkDTO> linkDTOS = new ArrayList<LinkDTO>();
+
+            public String title = "titulo5";
         };
 
         ObjectMapper mapper = new ObjectMapper();
@@ -244,6 +246,7 @@ class StudentControllerTest {
                 .andExpect(jsonPath("$.lessons[?(@.homework == '%s')]", "The homework").exists())
                 .andExpect(jsonPath("$.lessons[?(@.links)]").isArray())
                 .andExpect(jsonPath("$.lessons[?(@.date == '%s')]", stringDate).exists())
+                .andExpect(jsonPath("$.lessons[?(@.title == '%s')]", "titulo5").exists())
                 .andReturn();
     }
 

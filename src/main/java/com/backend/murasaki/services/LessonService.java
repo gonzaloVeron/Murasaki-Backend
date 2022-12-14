@@ -29,7 +29,7 @@ public class LessonService {
     @Transactional
     public Lesson save(LessonDTO dto) {
         ArrayList<Link> links = new ArrayList<Link>(dto.getLinkDTOS().stream().map(dTo -> new Link(dTo.getTitle(), dTo.getUrl())).toList());
-        Lesson lesson = new Lesson(dto.getDate(), dto.getLessonNumber(), dto.getContent(), dto.getHomework(), links);
+        Lesson lesson = new Lesson(dto.getDate(), dto.getLessonNumber(), dto.getContent(), dto.getHomework(), links, dto.getTitle());
         return this.lessonRepository.save(lesson);
     }
 
@@ -50,6 +50,7 @@ public class LessonService {
         lessonFound.setContent(dto.getContent());
         lessonFound.setDate(dto.getDate());
         lessonFound.setHomework(dto.getHomework());
+        lessonFound.setTitle(dto.getTitle());
 
         List<Link> newLinks = dto.getLinkDTOS().stream().filter(ldto -> ldto.getId() == null).map(ldto -> new Link(ldto.getTitle(), ldto.getUrl())).toList();
 
