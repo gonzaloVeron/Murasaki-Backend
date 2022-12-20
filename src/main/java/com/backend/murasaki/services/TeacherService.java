@@ -1,5 +1,6 @@
 package com.backend.murasaki.services;
 
+import com.backend.murasaki.dtos.ScheduleDTO;
 import com.backend.murasaki.dtos.TeacherDTO;
 import com.backend.murasaki.dtos.TranslateStudentDTO;
 import com.backend.murasaki.exceptions.NotFoundException;
@@ -79,6 +80,12 @@ public class TeacherService {
         Teacher teacher = this.findById(teacher_id);
         teacher.setName(dto.getName());
         return this.teacherRepository.save(teacher);
+    }
+
+    @Transactional
+    public ScheduleDTO getTeacherSchedules(int user_id){
+        User userFound = this.userRepository.findById(user_id).orElseThrow(() -> new NotFoundException("The requested user was not found"));
+        return userFound.getTeacher().getScheduleDTO();
     }
 
 }

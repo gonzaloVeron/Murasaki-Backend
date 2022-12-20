@@ -50,7 +50,7 @@ public class StudentService {
             teacher = this.teacherService.findById(user.getTeacher().getId());
         }
         String emailTutor = (dto.getEmailTutor() != null) ? dto.getEmailTutor() : "No tiene";
-        Student student = new Student(dto.getName(), dto.getJlptLevel(), teacher, dto.getPriorKnowledge(), dto.getAge(), dto.getTel(), dto.getEmail(), emailTutor, interests, new ArrayList<>());
+        Student student = new Student(dto.getName(), dto.getJlptLevel(), teacher, dto.getPriorKnowledge(), dto.getAge(), dto.getTel(), dto.getEmail(), emailTutor, interests, new ArrayList<>(), new ArrayList<>());
         this.studentRepository.save(student);
         return student;
     }
@@ -88,7 +88,7 @@ public class StudentService {
 
     @Transactional(readOnly = true)
     public Student findById(int student_id) {
-        return this.studentRepository.findById(student_id).orElseThrow(() -> new NotFoundException("The requested Student was not found."));
+        return this.studentRepository.findById(student_id).orElseThrow(() -> new RuntimeException("The requested Student was not found."));
     }
 
     @Transactional(readOnly = true)

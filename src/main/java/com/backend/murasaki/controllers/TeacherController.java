@@ -1,5 +1,6 @@
 package com.backend.murasaki.controllers;
 
+import com.backend.murasaki.dtos.ScheduleDTO;
 import com.backend.murasaki.dtos.TeacherDTO;
 import com.backend.murasaki.dtos.TranslateStudentDTO;
 import com.backend.murasaki.models.Teacher;
@@ -66,6 +67,13 @@ public class TeacherController {
     public Teacher actualTeacher(HttpServletRequest request){
         int user_id = (int)request.getAttribute("user_id");
         return this.teacherService.getActualTeacher(user_id);
+    }
+
+    @GetMapping(path = "/schedules")
+    @ResponseBody
+    public ScheduleDTO getTeacherSchedules(HttpServletRequest request){
+        int user_id = (int)request.getAttribute("user_id");
+        return this.teacherService.getTeacherSchedules(user_id);
     }
 
 }

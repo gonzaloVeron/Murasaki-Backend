@@ -2,8 +2,8 @@ package com.backend.murasaki.dtos;
 
 import com.backend.murasaki.models.Interest;
 import com.backend.murasaki.models.Lesson;
+import com.backend.murasaki.models.Schedule;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -29,7 +29,9 @@ public class StudentDTO {
 
     private List<Lesson> lessons;
 
-    public StudentDTO(String name, int jlptLevel, int teacherAsignedId, String priorKnowledge, int age, int tel, String email, String emailTutor, Set<Interest> interests, List<Lesson> lessons){
+    private List<Schedule> schedules;
+
+    public StudentDTO(String name, int jlptLevel, int teacherAsignedId, String priorKnowledge, int age, int tel, String email, String emailTutor, Set<Interest> interests, List<Lesson> lessons, List<Schedule> schedules){
         this.name = name;
         this.jlptLevel = jlptLevel;
         this.teacherAsignedId = teacherAsignedId;
@@ -40,6 +42,7 @@ public class StudentDTO {
         this.emailTutor = emailTutor;
         this.interests = interests;
         this.lessons = lessons;
+        this.schedules = schedules;
     }
 
     public String getName() {
@@ -121,4 +124,13 @@ public class StudentDTO {
     public void setLessons(List<Lesson> lessons) {
         this.lessons = lessons;
     }
+
+    public List<Schedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(List<Schedule> schedules) {
+        this.schedules = schedules;
+    }
+
 }

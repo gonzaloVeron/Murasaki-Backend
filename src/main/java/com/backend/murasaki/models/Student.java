@@ -3,7 +3,6 @@ package com.backend.murasaki.models;
 import com.backend.murasaki.dtos.StudentDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -37,6 +36,9 @@ public class Student {
     )
     private Set<Interest> interests;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Schedule> schedules;
+
     @Column
     private String priorKnowledge;
 
@@ -64,7 +66,7 @@ public class Student {
 
     }
 
-    public Student(int id, String name, int jlptLevel, Teacher teacherAssigned, String priorKnowledge, int age, int tel, String email, String emailTutor, Set<Interest> interests, List<Lesson> lessons){
+    public Student(int id, String name, int jlptLevel, Teacher teacherAssigned, String priorKnowledge, int age, int tel, String email, String emailTutor, Set<Interest> interests, List<Lesson> lessons, List<Schedule> schedules){
         this.id = id;
         this.name = name;
         this.jlptLevel = jlptLevel;
@@ -76,9 +78,10 @@ public class Student {
         this.emailTutor = emailTutor;
         this.interests = interests;
         this.lessons = lessons;
+        this.schedules = schedules;
     }
 
-    public Student(String name, int jlptLevel, Teacher teacherAssigned, String priorKnowledge, int age, int tel, String email, String emailTutor, Set<Interest> interests, List<Lesson> lessons){
+    public Student(String name, int jlptLevel, Teacher teacherAssigned, String priorKnowledge, int age, int tel, String email, String emailTutor, Set<Interest> interests, List<Lesson> lessons, List<Schedule> schedules){
         this.name = name;
         this.jlptLevel = jlptLevel;
         this.teacherAssigned = teacherAssigned;
@@ -89,6 +92,7 @@ public class Student {
         this.emailTutor = emailTutor;
         this.interests = interests;
         this.lessons = lessons;
+        this.schedules = schedules;
     }
 
     public int getId() {
@@ -188,11 +192,19 @@ public class Student {
     }
 
     public StudentDTO toDTO(){
-        return new StudentDTO(this.name, this.jlptLevel, this.teacherAssigned.getId(), this.priorKnowledge, this.age, this.tel, this.email, this.emailTutor, this.interests, this.lessons);
+        return new StudentDTO(this.name, this.jlptLevel, this.teacherAssigned.getId(), this.priorKnowledge, this.age, this.tel, this.email, this.emailTutor, this.interests, this.lessons, this.schedules);
     }
 
     public void deleteLesson(Lesson lesson){
         this.lessons.remove(lesson);
+    }
+
+    public List<Schedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(List<Schedule> schedules) {
+        this.schedules = schedules;
     }
 
 }
