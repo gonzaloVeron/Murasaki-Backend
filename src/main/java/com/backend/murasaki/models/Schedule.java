@@ -41,7 +41,7 @@ public class Schedule {
     }
 
     public String getDay() {
-        return day;
+        return this.day;
     }
 
     public void setDay(String day) {
@@ -49,7 +49,7 @@ public class Schedule {
     }
 
     public String getTime() {
-        return time;
+        return this.time;
     }
 
     public void setTime(String time) {

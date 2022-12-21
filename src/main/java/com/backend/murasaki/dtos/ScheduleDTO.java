@@ -1,5 +1,6 @@
 package com.backend.murasaki.dtos;
 
+import com.backend.murasaki.exceptions.NotFoundException;
 import com.backend.murasaki.models.Schedule;
 
 import java.util.ArrayList;
@@ -110,6 +111,94 @@ public class ScheduleDTO {
             default:
                 return new ArrayList<RealSchedule>();
         }
+    }
+
+    public ScheduleDTO merge(ScheduleDTO dto) {
+        // Lunes
+        for(int i = 0; i < dto.getLunes().size(); i++) {
+            RealSchedule actualLunesRsche = dto.getLunes().get(i);
+            boolean existInLunes = this.lunes.stream().anyMatch(rsche -> rsche.getTime().equals(actualLunesRsche.getTime()));
+            if (existInLunes) {
+                RealSchedule lrsche = this.lunes.stream().filter(r -> r.getTime().equals(actualLunesRsche.getTime())).findFirst().orElseThrow(() -> new NotFoundException("The requested Schedule was not found"));
+                lrsche.getStudentNames().addAll(actualLunesRsche.getStudentNames());
+            } else {
+                this.lunes.add(actualLunesRsche);
+            }
+        }
+
+        // Martes
+        for(int i = 0; i < dto.getMartes().size(); i++) {
+            RealSchedule actualMartesRsche = dto.getMartes().get(i);
+            boolean existInMartes = this.martes.stream().anyMatch(rsche -> rsche.getTime().equals(actualMartesRsche.getTime()));
+            if(existInMartes) {
+                RealSchedule marsche = this.martes.stream().filter(r -> r.getTime().equals(actualMartesRsche.getTime())).findFirst().orElseThrow(() -> new NotFoundException("The requested Schedule was not found"));
+                marsche.getStudentNames().addAll(actualMartesRsche.getStudentNames());
+            }else {
+                this.martes.add(actualMartesRsche);
+            }
+        }
+
+        // Miercoles
+        for(int i = 0; i < dto.getMiercoles().size(); i++) {
+            RealSchedule actualMiercolesRsche = dto.getMiercoles().get(i);
+            boolean existInMiercoles = this.miercoles.stream().anyMatch(rsche -> rsche.getTime().equals(actualMiercolesRsche.getTime()));
+            if(existInMiercoles) {
+                RealSchedule mirsche = this.miercoles.stream().filter(r -> r.getTime().equals(actualMiercolesRsche.getTime())).findFirst().orElseThrow(() -> new NotFoundException("The requested Schedule was not found"));
+                mirsche.getStudentNames().addAll(actualMiercolesRsche.getStudentNames());
+            }else{
+                this.miercoles.add(actualMiercolesRsche);
+            }
+        }
+
+        // Jueves
+        for(int i = 0; i < dto.getJueves().size(); i++) {
+            RealSchedule actualJuevesRsche = dto.getJueves().get(i);
+            boolean existInJueves = this.jueves.stream().anyMatch(rsche -> rsche.getTime().equals(actualJuevesRsche.getTime()));
+            if(existInJueves) {
+                RealSchedule jrsche = this.jueves.stream().filter(r -> r.getTime().equals(actualJuevesRsche.getTime())).findFirst().orElseThrow(() -> new NotFoundException("The requested Schedule was not found"));
+                jrsche.getStudentNames().addAll(actualJuevesRsche.getStudentNames());
+            }else{
+                this.jueves.add(actualJuevesRsche);
+            }
+        }
+
+        // Viernes
+        for(int i = 0; i < dto.getViernes().size(); i++) {
+            RealSchedule actualViernesRsche = dto.getViernes().get(i);
+            boolean existInViernes = this.viernes.stream().anyMatch(rsche -> rsche.getTime().equals(actualViernesRsche.getTime()));
+            if(existInViernes) {
+                RealSchedule vrsche = this.viernes.stream().filter(r -> r.getTime().equals(actualViernesRsche.getTime())).findFirst().orElseThrow(() -> new NotFoundException("The requested Schedule was not found"));
+                vrsche.getStudentNames().addAll(actualViernesRsche.getStudentNames());
+            }else{
+                this.viernes.add(actualViernesRsche);
+            }
+        }
+
+        // Sabado
+        for(int i = 0; i < dto.getSabado().size(); i++) {
+            RealSchedule actualSabadoRsche = dto.getSabado().get(i);
+            boolean existInSabado = this.sabado.stream().anyMatch(rsche -> rsche.getTime().equals(actualSabadoRsche.getTime()));
+            if(existInSabado) {
+                RealSchedule srsche = this.sabado.stream().filter(r -> r.getTime().equals(actualSabadoRsche.getTime())).findFirst().orElseThrow(() -> new NotFoundException("The requested Schedule was not found"));
+                srsche.getStudentNames().addAll(actualSabadoRsche.getStudentNames());
+            }else{
+                this.sabado.add(actualSabadoRsche);
+            }
+        }
+
+        // Domingo
+        for(int i = 0; i < dto.getDomingo().size(); i++) {
+            RealSchedule actualDomingoRsche = dto.getDomingo().get(i);
+            boolean existInDomingo = this.domingo.stream().anyMatch(rsche -> rsche.getTime().equals(actualDomingoRsche.getTime()));
+            if(existInDomingo) {
+                RealSchedule drsche = this.domingo.stream().filter(r -> r.getTime().equals(actualDomingoRsche.getTime())).findFirst().orElseThrow(() -> new NotFoundException("The requested Schedule was not found"));
+                drsche.getStudentNames().addAll(actualDomingoRsche.getStudentNames());
+            }else{
+                this.domingo.add(actualDomingoRsche);
+            }
+        }
+
+        return this;
     }
 
 }

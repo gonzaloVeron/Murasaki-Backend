@@ -82,9 +82,9 @@ public class Teacher {
             for(int j = 0; j < stRealSchedules.size(); j++) {
                 Schedule sche = stRealSchedules.get(j);
                 List<RealSchedule> scheDay = dto.getByDay(sche.getDay());
-                boolean existWithEqualTime = scheDay.stream().anyMatch(rsched -> rsched.getTime() == sche.getTime());
+                boolean existWithEqualTime = scheDay.stream().anyMatch(rsched -> rsched.getTime().equals(sche.getTime()));
                 if(existWithEqualTime){
-                    RealSchedule rsche = scheDay.stream().filter(rsched -> rsched.getTime() == sche.getTime()).findFirst().orElseThrow(() -> new NotFoundException("The requested schedule was not found"));
+                    RealSchedule rsche = scheDay.stream().filter(rsched -> rsched.getTime().equals(sche.getTime())).findFirst().orElseThrow(() -> new NotFoundException("The requested schedule was not found"));
                     rsche.getStudentNames().add(st.getName());
                 }else{
                     List<String> studentNames = new ArrayList<String>();

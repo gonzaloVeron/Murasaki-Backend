@@ -1,6 +1,7 @@
 package com.backend.murasaki.controllers;
 
 import com.backend.murasaki.dtos.*;
+import com.backend.murasaki.models.Schedule;
 import com.backend.murasaki.models.Student;
 import com.backend.murasaki.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +88,18 @@ public class StudentController {
     @PostMapping(path = "/{source_teacher_id}/{target_teacher_id}")
     public void translateStudents(@PathVariable int source_teacher_id, @PathVariable int target_teacher_id, @RequestBody TranslateStudentDTO dto){
         this.studentService.translateStudents(source_teacher_id, target_teacher_id, dto);
+    }
+
+    @PostMapping(path = "/removeSchedule/{student_id}/{schedule_id}")
+    @ResponseBody
+    public Student removeSchedule(@PathVariable int student_id, @PathVariable int schedule_id){
+        return this.studentService.removeSchedule(student_id, schedule_id);
+    }
+
+    @PostMapping(path = "/addSchedule/{student_id}")
+    @ResponseBody
+    public Student addSchedule(@PathVariable int student_id, @RequestBody Schedule sche) {
+        return this.studentService.addSchedule(student_id, sche);
     }
 
 }

@@ -4,6 +4,7 @@ import com.backend.murasaki.dtos.*;
 import com.backend.murasaki.exceptions.NotFoundException;
 import com.backend.murasaki.models.*;
 import com.backend.murasaki.repositories.LessonRepository;
+import com.backend.murasaki.repositories.ScheduleRepository;
 import com.backend.murasaki.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,6 +38,9 @@ public class StudentService {
     @Autowired
     private LessonRepository lessonRepository;
 
+    @Autowired
+    private ScheduleRepository scheduleRepository;
+
     @Transactional
     public Student save(int user_id, StudentDTO dto) {
         User user = this.userService.findById(user_id);
@@ -50,7 +54,7 @@ public class StudentService {
             teacher = this.teacherService.findById(user.getTeacher().getId());
         }
         String emailTutor = (dto.getEmailTutor() != null) ? dto.getEmailTutor() : "No tiene";
-        Student student = new Student(dto.getName(), dto.getJlptLevel(), teacher, dto.getPriorKnowledge(), dto.getAge(), dto.getTel(), dto.getEmail(), emailTutor, interests, new ArrayList<>(), new ArrayList<>());
+        Student student = new Student(dto.getName(), dto.getJlptLevel(), teacher, dto.getPriorKnowledge(), dto.getAge(), dto.getTel(), dto.getEmail(), emailTutor, interests, new ArrayList<>(), dto.getSchedules());
         this.studentRepository.save(student);
         return student;
     }
@@ -171,6 +175,21 @@ public class StudentService {
         });
         this.studentRepository.saveAll(sourceStudents);
         this.studentRepository.saveAll(targetStudents);
+    }
+
+    @Transactional
+    public Student removeSchedule(int student_id, int schedule_id){
+        Student studentFound = this.findById(student_id);
+        Schedule schedule = this.scheduleRepository.findById(schedule_id).orElseThrow(() -> new NotFoundException("The requested schedule was not found"));
+        studentFound.getSchedules().remove(schedule);
+        return this.studentRepository.save(studentFound);
+    }
+
+    @Transactional
+    public Student addSchedule(int student_id, Schedule sche){
+        Student studentFound = this.findById(student_id);
+        studentFound.getSchedules().add(sche);
+        return this.studentRepository.save(studentFound);
     }
 
 }
