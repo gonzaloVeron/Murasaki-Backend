@@ -23,7 +23,7 @@ public class StudentController {
     @GetMapping(path = "")
     @ResponseBody
     public List<StudentDTOout> getAll() {
-        return this.studentService.findAll().stream().map(student -> new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getEmail(), student.getTel(), student.getTeacherAssigned().toDTO())).collect(Collectors.toList());
+        return this.studentService.findAll().stream().map(student -> new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getEmail(), student.getTel(), student.getTeacherAssigned().toDTO(), student.getStatus())).collect(Collectors.toList());
     }
 
     @GetMapping(path = "/{student_id}")
@@ -83,6 +83,11 @@ public class StudentController {
     @DeleteMapping(path = "/{student_id}")
     public void delete(@PathVariable int student_id){
         this.studentService.delete(student_id);
+    }
+
+    @PostMapping(path="/changeStatus/{student_id}")
+    public void changeStatus(@PathVariable int student_id) {
+        this.studentService.changeStatus(student_id);
     }
 
     @PostMapping(path = "/{source_teacher_id}/{target_teacher_id}")

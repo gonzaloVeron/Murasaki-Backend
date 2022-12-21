@@ -54,6 +54,9 @@ public class Student {
     @Column
     private int jlptLevel;
 
+    @Column
+    private boolean status;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id", nullable = false)
     @JsonIgnore
@@ -79,6 +82,7 @@ public class Student {
         this.interests = interests;
         this.lessons = lessons;
         this.schedules = schedules;
+        this.status = true;
     }
 
     public Student(String name, int jlptLevel, Teacher teacherAssigned, String priorKnowledge, int age, int tel, String email, String emailTutor, Set<Interest> interests, List<Lesson> lessons, List<Schedule> schedules){
@@ -93,6 +97,7 @@ public class Student {
         this.interests = interests;
         this.lessons = lessons;
         this.schedules = schedules;
+        this.status = true;
     }
 
     public int getId() {
@@ -192,7 +197,7 @@ public class Student {
     }
 
     public StudentDTO toDTO(){
-        return new StudentDTO(this.name, this.jlptLevel, this.teacherAssigned.getId(), this.priorKnowledge, this.age, this.tel, this.email, this.emailTutor, this.interests, this.lessons, this.schedules);
+        return new StudentDTO(this.name, this.jlptLevel, this.teacherAssigned.getId(), this.priorKnowledge, this.age, this.tel, this.email, this.emailTutor, this.interests, this.lessons, this.schedules, this.status);
     }
 
     public void deleteLesson(Lesson lesson){
@@ -205,6 +210,14 @@ public class Student {
 
     public void setSchedules(List<Schedule> schedules) {
         this.schedules = schedules;
+    }
+
+    public boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
 }

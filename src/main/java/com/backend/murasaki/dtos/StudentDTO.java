@@ -31,7 +31,9 @@ public class StudentDTO {
 
     private List<Schedule> schedules;
 
-    public StudentDTO(String name, int jlptLevel, int teacherAsignedId, String priorKnowledge, int age, int tel, String email, String emailTutor, Set<Interest> interests, List<Lesson> lessons, List<Schedule> schedules){
+    private boolean status;
+
+    public StudentDTO(String name, int jlptLevel, int teacherAsignedId, String priorKnowledge, int age, int tel, String email, String emailTutor, Set<Interest> interests, List<Lesson> lessons, List<Schedule> schedules, boolean status){
         this.name = name;
         this.jlptLevel = jlptLevel;
         this.teacherAsignedId = teacherAsignedId;
@@ -43,6 +45,7 @@ public class StudentDTO {
         this.interests = interests;
         this.lessons = lessons;
         this.schedules = schedules;
+        this.status = status;
     }
 
     public String getName() {
@@ -131,6 +134,14 @@ public class StudentDTO {
 
     public void setSchedules(List<Schedule> schedules) {
         this.schedules = schedules;
+    }
+
+    public boolean getStatus(){
+        return this.status;
+    }
+
+    public void setStatus(boolean status){
+        this.status = status;
     }
 
 }

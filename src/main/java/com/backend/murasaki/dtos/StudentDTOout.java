@@ -14,13 +14,16 @@ public class StudentDTOout {
 
     private TeacherDTO teacherDTO;
 
-    public StudentDTOout(int id, String name, int jlptLevel, String email, int tel, TeacherDTO teacherDTO) {
+    private boolean status;
+
+    public StudentDTOout(int id, String name, int jlptLevel, String email, int tel, TeacherDTO teacherDTO, boolean status) {
         this.id = id;
         this.name = name;
         this.jlptLevel = jlptLevel;
         this.email = email;
         this.tel = tel;
         this.teacherDTO = teacherDTO;
+        this.status = status;
     }
 
     public String getName() {
@@ -69,6 +72,14 @@ public class StudentDTOout {
 
     public void setTel(int tel) {
         this.tel = tel;
+    }
+
+    public boolean getStatus(){
+        return this.status;
+    }
+
+    public void setStatus(boolean status){
+        this.status = status;
     }
 
 }

@@ -140,7 +140,7 @@ public class StudentService {
                 students = this.studentRepository.findByNameLikeAndTeacherAssigned(p,"%"+search_text+"%", user.getTeacher());
             }
         }
-        return students.map(student -> new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getEmail(), student.getTel(), student.getTeacherAssigned().toDTO()));
+        return students.map(student -> new StudentDTOout(student.getId(), student.getName(), student.getJlptLevel(), student.getEmail(), student.getTel(), student.getTeacherAssigned().toDTO(), student.getStatus()));
     }
 
     private boolean isInteger(String str){
@@ -151,6 +151,13 @@ public class StudentService {
     public void delete(int student_id){
         Student student = this.findById(student_id);
         this.studentRepository.delete(student);
+    }
+
+    @Transactional
+    public void changeStatus(int student_id){
+        Student studentFound = this.findById(student_id);
+        studentFound.setStatus(!studentFound.getStatus());
+        this.studentRepository.save(studentFound);
     }
 
     @Transactional
