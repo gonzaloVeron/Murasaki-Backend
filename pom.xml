@@ -119,25 +119,6 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-pmd-plugin</artifactId>
-				<version>3.13.0</version>
-				<configuration>
-					<!-- failOnViolation is actually true by default, but can be disabled -->
-					<failOnViolation>true</failOnViolation>
-					<!-- printFailingErrors is pretty useful -->
-					<printFailingErrors>true</printFailingErrors>
-					<skipEmptyReport>false</skipEmptyReport>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.7</version>
