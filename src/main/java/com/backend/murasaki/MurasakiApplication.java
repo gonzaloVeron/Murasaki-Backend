@@ -10,6 +10,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class MurasakiApplication {
 
 	public static void main(String[] args) {
+		System.out.println("a");
 		SpringApplication.run(MurasakiApplication.class, args);
 	}
 
